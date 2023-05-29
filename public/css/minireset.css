@@ -73,3 +73,28 @@ td,
 th {
     padding: 0;
 }
+
+html, body{
+    width: 100%;
+    height: 100%;
+}
+
+#root{
+    width: 100%;
+    height: 100%;
+}
+* {
+    margin: 0;
+    padding: 0;
+    /*
+     default: content-box, when set width and height, will not include the padding and margin
+     border-box: it will include it
+     */
+    box-sizing: border-box;
+    /*
+      change navigator point's effect
+    */
+    scroll-behavior: smooth;
+
+    font-family: "Eudoxus Sans", sans-serif;
+}
