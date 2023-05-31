@@ -10,10 +10,18 @@ export default (url, data={}, requestType='g') => {
             // 默认会把promise对象返回
             // 注意这里的第二个参数,对象里面设置params,然后params的参数是另一个对象
             promise =  axios.get( url,{
-                params: data
+                params: data,
+                headers:{
+                    token: localStorage.getItem("token")
+                }
+
             })
         }else {
-            promise = axios.post( url,data)
+            promise = axios.post( url,data,{
+                headers:{
+                    token: localStorage.getItem("token")
+                }
+            })
         }
 
         promise.then((response) =>{

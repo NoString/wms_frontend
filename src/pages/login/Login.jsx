@@ -1,8 +1,8 @@
 import './login.css'
 import {Button, message} from "antd";
-import {useState} from "react";
+import React, {useState} from "react";
 import {reqLogin} from "../../api/login";
-import {useNavigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 export default () => {
     let [username, setUsername] = useState('');
@@ -10,6 +10,9 @@ export default () => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
 
+    if (localStorage.getItem("username") !== null && localStorage.getItem("token") !== null){
+        return <Navigate to={'/'}/>
+    }
 
     //解决回调问题, 函数前面加上async
     const loginAction = async (element) => {
@@ -26,6 +29,8 @@ export default () => {
             message.error(res.msg)
             return
         }
+        localStorage.setItem("username",res.d.username)
+        localStorage.setItem("token",res.d.token)
         message.success("welcome, " + res.d.nickname +".")
         navigate('/')
     }
