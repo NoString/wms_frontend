@@ -15,7 +15,7 @@ import {
 export default () => {
 
     const Icons = createFromIconfontCN({
-        scriptUrl:'//at.alicdn.com/t/c/font_4098391_ac4e7aliur.js'
+        scriptUrl:'//at.alicdn.com/t/c/font_4098391_6tv0rmavj9r.js'
     })
 
     function getItem(label, key, icon, children, type) {
@@ -30,13 +30,13 @@ export default () => {
 
     const items = [
         getItem('Home', '1', <HomeOutlined/>,[
-            getItem('Dashboard','2',<Icons type={'icon-dashboard'}/>),
-            getItem('Chart','3',<Icons type={'icon-chart-bar'}/>),
+            getItem(<NavLink  to={'dashboard'}>Dashboard</NavLink>,'2',<Icons type={'icon-dashboard'}/>),
+            getItem(<NavLink  to={'chart'}>Chart</NavLink>,'3',<Icons type={'icon-chart-bar'}/>),
 
             ]),
 
         getItem('Basic', '100', <CopyOutlined/>,[
-            getItem('Material','101',<Icons type={'icon-material'}/>),
+            getItem(<NavLink  to={'material'}>Material</NavLink>,'101',<Icons type={'icon-material'}/>),
             getItem('Classify','102',<Icons type={'icon-fenlei'}/>),
             getItem('Store Status','103',<Icons type={'icon-flag'}/>),
             getItem('Store Type','104',<Icons type={'icon-type1'}/>),
@@ -45,7 +45,7 @@ export default () => {
         getItem('Storage', '200', <PieChartOutlined/>,[
             getItem('Location','201',<Icons type={'icon-localtion'}/>),
             getItem('Detail','202',<Icons type={'icon-details'}/>),
-            getItem('Detail Change','203',<Icons type={'icon-exchange'}/>),
+            getItem('Detail Modify','203',<Icons type={'icon-exchange'}/>),
             getItem('Statistic','204',<Icons type={'icon-Statistics'}/>),
         ]),
 
@@ -57,19 +57,19 @@ export default () => {
         ]),
 
         getItem('Log', '400', <BarsOutlined />,[
-            getItem('Storage Change','401'),
-            getItem('Storage Time','402'),
-            getItem('Day In/Out','403'),
-            getItem('Day In Detail','404'),
-            getItem('Day Out Detail','405'),
+            getItem('Modify Record','401',<Icons type={'icon-rizhi'}/>),
+            getItem('Daily Usage','402',<Icons type={'icon-rizhi'}/>),
+            getItem('Day In/Out','403',<Icons type={'icon-rizhi'}/>),
+            getItem('Day In Detail','404',<Icons type={'icon-rizhi'}/>),
+            getItem('Day Out Detail','405',<Icons type={'icon-rizhi'}/>),
         ]),
         getItem('System', '500',<PushpinOutlined />,[
-            getItem('Menu List','501'),
-            getItem('Privilege','502'),
-            getItem('Users','503'),
+            getItem('Menu List','501',<Icons type={'icon-menu'}/>),
+            getItem('Privilege','502',<Icons type={'icon-privilege'}/>),
+            getItem('Users','503',<Icons type={'icon-User-List'}/>),
         ]),
         getItem('setting', '600', <UserOutlined />,[
-            getItem('Profile','601'),
+            getItem('Profile','601',<Icons type={'icon-bu-profile-o'}/>),
         ]),
 
     ];
@@ -79,8 +79,8 @@ export default () => {
                 <img src={navHeader} alt={''} style={{marginTop: "10px", padding: "10px"}}/>
             </NavLink>
             <Menu
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                defaultSelectedKeys={['2']}
+                defaultOpenKeys={['1']}
                 mode="inline"
                 theme="light"
                 items={items}

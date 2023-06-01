@@ -11,7 +11,7 @@ export default () => {
     const [messageApi, contextHolder] = message.useMessage();
 
     if (localStorage.getItem("username") !== null && localStorage.getItem("token") !== null){
-        return <Navigate to={'/'}/>
+        return <Navigate to={'/dashboard'}/>
     }
 
     //解决回调问题, 函数前面加上async
@@ -32,7 +32,7 @@ export default () => {
         localStorage.setItem("username",res.d.username)
         localStorage.setItem("token",res.d.token)
         message.success("welcome, " + res.d.nickname +".")
-        navigate('/')
+        navigate('/dashboard')
     }
     return (
 
