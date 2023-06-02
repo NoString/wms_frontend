@@ -1,0 +1,12 @@
+.header {
+  height: 10%;
+}
+.header .detail-bar {
+  height: 50%;
+  background-color: #61dafb;
+}
+.header .tab-bar {
+  height: 50%;
+  background-color: orange;
+}
+/*# sourceMappingURL=header.css.map */

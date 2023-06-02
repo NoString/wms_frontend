@@ -10,7 +10,8 @@ export default () => {
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
 
-    if (localStorage.getItem("username") !== null && localStorage.getItem("token") !== null){
+    if (localStorage.getItem("username") !== null
+        && localStorage.getItem("token") !== null){
         return <Navigate to={'/dashboard'}/>
     }
 
@@ -31,6 +32,7 @@ export default () => {
         }
         localStorage.setItem("username",res.d.username)
         localStorage.setItem("token",res.d.token)
+        localStorage.setItem("nickname",res.d.nickname)
         message.success("welcome, " + res.d.nickname +".")
         navigate('/dashboard')
     }
