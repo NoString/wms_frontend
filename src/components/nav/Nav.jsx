@@ -38,39 +38,39 @@ export default () => {
 
         getItem('Basic', '100', <CopyOutlined/>, [
             getItem(<NavLink to={'material'}>Material</NavLink>, '101', <Icons type={'icon-material'}/>),
-            getItem('Classify', '102', <Icons type={'icon-fenlei'}/>),
-            getItem('Store Status', '103', <Icons type={'icon-flag'}/>),
-            getItem('Store Type', '104', <Icons type={'icon-type1'}/>),
+            getItem(<NavLink to={'classify'}>Classify</NavLink>, '102', <Icons type={'icon-fenlei'}/>),
+            getItem(<NavLink to={'storeStatus'}>Store Status</NavLink>, '103', <Icons type={'icon-flag'}/>),
+            getItem(<NavLink to={'storeType'}>Store Type</NavLink>, '104', <Icons type={'icon-type1'}/>),
         ]),
 
         getItem('Storage', '200', <PieChartOutlined/>, [
-            getItem('Location', '201', <Icons type={'icon-localtion'}/>),
-            getItem('Detail', '202', <Icons type={'icon-details'}/>),
-            getItem('Detail Modify', '203', <Icons type={'icon-exchange'}/>),
-            getItem('Statistic', '204', <Icons type={'icon-Statistics'}/>),
+            getItem(<NavLink to={'location'}>Location</NavLink>, '201', <Icons type={'icon-localtion'}/>),
+            getItem(<NavLink to={'detail'}>Detail</NavLink>, '202', <Icons type={'icon-details'}/>),
+            getItem(<NavLink to={'detailModify'}>Detail Modify</NavLink>, '203', <Icons type={'icon-exchange'}/>),
+            getItem(<NavLink to={'statistic'}>Statistic</NavLink>, '204', <Icons type={'icon-Statistics'}/>),
         ]),
 
         getItem('Operation', '300', <ToolOutlined/>, [
-            getItem('Put In', '301', <Icons type={'icon-in1157920easyiconnet'}/>),
-            getItem('Move Out', '302', <Icons type={'icon-outnet'}/>),
-            getItem('Check', '303', <Icons type={'icon-Statistics'}/>),
-            getItem('Transfer', '304', <Icons type={'icon-check'}/>),
+            getItem(<NavLink to={'putIn'}>Put In</NavLink>, '301', <Icons type={'icon-in1157920easyiconnet'}/>),
+            getItem(<NavLink to={'moveOut'}>Move Out</NavLink>, '302', <Icons type={'icon-outnet'}/>),
+            getItem(<NavLink to={'check'}>Check</NavLink>, '303', <Icons type={'icon-Statistics'}/>),
+            getItem(<NavLink to={'transfer'}>Transfer</NavLink>, '304', <Icons type={'icon-check'}/>),
         ]),
 
         getItem('Log', '400', <BarsOutlined/>, [
-            getItem('Modify Record', '401', <Icons type={'icon-rizhi'}/>),
-            getItem('Daily Usage', '402', <Icons type={'icon-rizhi'}/>),
-            getItem('Day In/Out', '403', <Icons type={'icon-rizhi'}/>),
-            getItem('Day In Detail', '404', <Icons type={'icon-rizhi'}/>),
-            getItem('Day Out Detail', '405', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'modifyRecord'}>Modify Record</NavLink>, '401', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dailyUsage'}>Daily Usage</NavLink>, '402', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dayInOut'}>Day In/Out</NavLink>, '403', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dayInDetail'}>Day In Detail</NavLink>, '404', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dayOutDetail'}>Day Out Detail</NavLink>, '405', <Icons type={'icon-rizhi'}/>),
         ]),
         getItem('System', '500', <PushpinOutlined/>, [
-            getItem('Menu List', '501', <Icons type={'icon-menu'}/>),
-            getItem('Privilege', '502', <Icons type={'icon-privilege'}/>),
-            getItem('Users', '503', <Icons type={'icon-User-List'}/>),
+            getItem(<NavLink to={'menuList'}>Menu List</NavLink>, '501', <Icons type={'icon-menu'}/>),
+            getItem(<NavLink to={'privilege'}>Privilege</NavLink>, '502', <Icons type={'icon-privilege'}/>),
+            getItem(<NavLink to={'users'}>Users</NavLink>, '503', <Icons type={'icon-User-List'}/>),
         ]),
         getItem('setting', '600', <UserOutlined/>, [
-            getItem('Profile', '601', <Icons type={'icon-bu-profile-o'}/>),
+            getItem(<NavLink to={'profile'}>Profile</NavLink>, '601', <Icons type={'icon-bu-profile-o'}/>),
         ]),
 
     ];
