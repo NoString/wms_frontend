@@ -13,8 +13,24 @@ import {
 } from "@ant-design/icons";
 
 export default () => {
+    let defaultOpen, defaultSelect, pathName = window.location.pathname.split('/')[1]
+    const dynamicSelectNav = () => {
+        var flag = false
+        items.forEach((item) =>{
+            item.children.forEach((childrenItem) =>{
+                if (childrenItem.label.props.to === pathName){
+                    defaultSelect = childrenItem.key + ''
+                    defaultOpen = item.key + ''
+                    flag = true
+                }
+            })
+        });
+        if (!flag){
+            defaultOpen = 1
+            defaultSelect = 2
+        }
 
-
+    }
     const Icons = createFromIconfontCN({
         scriptUrl: '//at.alicdn.com/t/c/font_4098391_6tv0rmavj9r.js'
     })
@@ -74,6 +90,8 @@ export default () => {
         ]),
 
     ];
+    dynamicSelectNav();
+
     return (
         <div className={'nav'}>
 
@@ -81,8 +99,8 @@ export default () => {
                 <img src={navHeader} alt={''} style={{marginTop: "10px", padding: "10px"}}/>
             </NavLink>
             <Menu
-                defaultSelectedKeys={['2']}
-                defaultOpenKeys={['1']}
+                defaultSelectedKeys={[defaultSelect]}
+                defaultOpenKeys={[defaultOpen]}
                 mode="inline"
                 theme="light"
                 items={items}/>

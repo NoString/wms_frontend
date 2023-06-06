@@ -43,26 +43,37 @@ export default (props) =>{
     return(
         <div className = {'header'}>
             <div className={'detail-bar'}>
-                <Button
-                    onClick={toggleCollapsed}
-                    size={"middle"}
-                >
-                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                </Button>
-                <Button size={"middle"} shape="circle" icon={<RedoOutlined />} onClick={refresh}/>
-                <Button size={"middle"} shape="circle" icon={<FullscreenOutlined />} />
-                <Dropdown
-                    menu={{
-                        items,
-                    }}
-                >
-                    <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                            {localStorage.getItem("nickname")}
-                            <DownOutlined />
-                        </Space>
-                    </a>
-                </Dropdown>
+                <div className="left-container">
+1
+                </div>
+                <div className="mid-container">
+2
+                </div>
+                <div className="right-container">
+3
+                </div>
+
+                {/*<Button*/}
+                {/*    onClick={toggleCollapsed}*/}
+                {/*    size={"middle"}*/}
+                {/*>*/}
+                {/*    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}*/}
+                {/*</Button>*/}
+
+                {/*<Button size={"middle"} shape="circle" icon={<RedoOutlined />} onClick={refresh}/>*/}
+                {/*<Button size={"middle"} shape="circle" icon={<FullscreenOutlined />} />*/}
+                {/*<Dropdown*/}
+                {/*    menu={{*/}
+                {/*        items,*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    <a onClick={(e) => e.preventDefault()}>*/}
+                {/*        <Space>*/}
+                {/*            {localStorage.getItem("nickname")}*/}
+                {/*            <DownOutlined />*/}
+                {/*        </Space>*/}
+                {/*    </a>*/}
+                {/*</Dropdown>*/}
 
             </div>
             <div className={'tab-bar'}>

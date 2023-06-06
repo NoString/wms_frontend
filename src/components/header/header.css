@@ -3,7 +3,16 @@
 }
 .header .detail-bar {
   height: 50%;
-  background-color: #61dafb;
+  display: flex;
+}
+.header .detail-bar .left-container {
+  align-items: center;
+}
+.header .detail-bar .mid-container {
+  background-color: orange;
+}
+.header .detail-bar .right-container {
+  background-color: brown;
 }
 .header .tab-bar {
   height: 50%;

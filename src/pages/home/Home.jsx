@@ -42,7 +42,7 @@ export default () => {
     return (
         <Layout style={{height: "100%"}}>
             <Sider theme={'light'} collapsed={collapsed}>
-                <Nav />
+                <Nav/>
             </Sider>
             <Layout>
                 <Header collapsed={collapsed} setCollapsed={setCollapsed}/>
