@@ -1,20 +1,53 @@
 .header{
-  height: 10%;
+  height: 11%;
+  background-color: white;
+  border-radius: 10px;
+
   .detail-bar{
     height: 50%;
     display: flex;
     .left-container{
+      display: flex;
       align-items: center;
+      flex-basis: 0px;
+      flex-grow: 2;
+      justify-content: flex-start;
+      .toggle-btn{
+        margin-left: 5%;
+      }
     }
     .mid-container{
-      background-color: orange;
+      display: flex;
+      align-items: center;
+      flex-basis: 0px;
+      flex-grow: 5;
+      justify-content: center;
+      .mid-select{
+        width: 50%;
+      }
+
     }
     .right-container{
-      background-color: brown;
+      display: flex;
+      align-items: center;
+      flex-basis: 0px;
+      flex-grow: 2;
+      justify-content: flex-end;
+      *{
+        margin-right: 5%;
+      }
     }
+
   }
+  hr{
+    height: 1px;
+    border: none;
+    background-color: rgb(207,207,196);
+  }
+
   .tab-bar{
+    margin-top: 0.5%;
     height: 50%;
-    background-color: orange;
+
   }
 }
