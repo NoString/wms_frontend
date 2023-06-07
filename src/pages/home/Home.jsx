@@ -5,6 +5,7 @@ import {Content, Footer} from "antd/es/layout/layout";
 import { Layout} from "antd";
 import Nav from "../../components/nav/Nav";
 import Header from "../../components/header/Header";
+import './home.css'
 
 import Material from "./material/Material";
 import Dashboard from "./dashboard/Dashboard";
@@ -40,7 +41,7 @@ export default () => {
 
 
     return (
-        <Layout style={{height: "100%"}}>
+        <Layout style={{height: "100%"}} className={'home'}>
             <Sider theme={'light'} collapsed={collapsed}>
                 <Nav/>
             </Sider>
@@ -74,7 +75,13 @@ export default () => {
                         {<Route path={'/'} element={<Navigate to={'/dashboard'}/>}/>}
                     </Routes>
                 </Content>
-                <Footer>Footer</Footer>
+                <Footer className={'footer'}>
+
+                        <p>
+                            Create by zhs. Here is <a href="https://github.com/NoString/wms_frontend" target={'_blank'}>the front end</a> and <a href="https://github.com/NoString/wms_backend" target={'_blank'}>the back end</a>
+                        </p>
+
+                </Footer>
             </Layout>
         </Layout>
 

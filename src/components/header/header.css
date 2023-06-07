@@ -1,7 +1,8 @@
 .header {
   height: 11%;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 5px;
+  margin: 5px;
 }
 .header .detail-bar {
   height: 50%;
