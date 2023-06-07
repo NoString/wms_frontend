@@ -42,12 +42,12 @@ export default () => {
 
     return (
         <Layout style={{height: "100%"}} className={'home'}>
-            <Sider theme={'light'} collapsed={collapsed}>
+            <Sider theme={'light'} collapsed={collapsed} style={{overflow:'overlay'}}>
                 <Nav/>
             </Sider>
             <Layout>
                 <Header collapsed={collapsed} setCollapsed={setCollapsed}/>
-                <Content>
+                <Content className={'layout-content'}>
                     <Routes>
                         {<Route path={'dashboard'} element={<Dashboard/>}/>}
                         {<Route path={'chart'} element={<Chart/>}/>}
