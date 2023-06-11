@@ -26,8 +26,8 @@ export default () => {
             })
         });
         if (!flag){
-            defaultOpen = 1
-            defaultSelect = 2
+            defaultOpen = '1'
+            defaultSelect = '2'
         }
 
     }
@@ -92,6 +92,17 @@ export default () => {
     ];
     dynamicSelectNav();
 
+    const [openKeys, setOpenKeys] = useState([defaultOpen]);
+    const rootSubmenuKeys = ['1', '100', '200', '300', '400', '500', '600'];
+    const onOpenChange = (keys) => {
+        const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            setOpenKeys(keys);
+        } else {
+            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
+        }
+    };
+
     return (
         <div className={'nav'}>
 
@@ -103,7 +114,10 @@ export default () => {
                 defaultOpenKeys={[defaultOpen]}
                 mode="inline"
                 theme="light"
-                items={items}/>
+                items={items}
+                onOpenChange={onOpenChange}
+                openKeys={openKeys}
+            />
 
         </div>
     )

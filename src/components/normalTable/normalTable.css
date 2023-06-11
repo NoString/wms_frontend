@@ -1,0 +1,33 @@
+.normalTable {
+  padding: 0.5%;
+}
+.normalTable .table-part {
+  background-color: #F5F5F5;
+  border-radius: 5px;
+}
+.normalTable .table-part .operation {
+  margin-top: 0.5%;
+  display: flex;
+  justify-content: space-between;
+  height: 20%;
+}
+.normalTable .table-part .operation .operation-normal {
+  width: 50%;
+  margin-top: 0.5%;
+}
+.normalTable .table-part .operation .operation-normal * {
+  margin-left: 1%;
+}
+.normalTable .table-part .operation .operation-output {
+  margin-top: 0.5%;
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+}
+.normalTable .table-part .operation .operation-output * {
+  margin-right: 2%;
+}
+.normalTable .table-part .main-table {
+  margin-top: 0.5%;
+}
+/*# sourceMappingURL=normalTable.css.map */
