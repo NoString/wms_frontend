@@ -2,46 +2,41 @@ import React, {useState} from "react";
 import './normalTable.css'
 import {Button, Col, Form, Input, Row, Select, Space, Table, Tag, theme} from "antd";
 import Search from "antd/es/input/Search";
-import {DownOutlined, FileExcelOutlined, PrinterOutlined, RedoOutlined} from "@ant-design/icons";
+import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
+import {reqQueryTable} from "../../api/table";
 
 export default () => {
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            render: (text) => <a>{text}</a>,
+            title: 'Nickname',
+            dataIndex: 'nickname',
+            key: 'nickname',
+
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'Username',
+            dataIndex: 'username',
+            key: 'username',
+            render: (text) => {
+                return (<a>{text}</a>)
+            },
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: 'Mobile',
+            dataIndex: 'mobile',
+            key: 'mobile',
         },
         {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            render: (_, {tags}) => (
-                <>
-                    {tags.map((tag) => {
-                        let color = tag.length > 5 ? 'geekblue' : 'green';
-                        if (tag === 'loser') {
-                            color = 'volcano';
-                        }
-                        return (
-                            <Tag color={color} key={tag}>
-                                {tag.toUpperCase()}
-                            </Tag>
-                        );
-                    })}
-                </>
-            ),
+            title: 'Password',
+            dataIndex: 'password',
+            key: 'password',
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            key: 'gender',
+            render: text => text === 0 ? 'male' : 'female'
         },
         {
             title: 'Action',
@@ -54,6 +49,11 @@ export default () => {
             ),
         },
     ];
+    const getdata = async () => {
+        let reqQueryTable1 = await reqQueryTable(null,'/users/list');
+        return reqQueryTable1.d;
+    }
+
     const data = [
         {
             key: '1',
