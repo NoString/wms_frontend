@@ -1,183 +1,226 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './normalTable.css'
-import {Button, Col, Form, Input, Row, Select, Space, Table, Tag, theme} from "antd";
+import {Button, Col, Form, Input, message, Row, Select, Space, Table, Tag, theme, DatePicker} from "antd";
 import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
-import {reqQueryTable} from "../../api/table";
+import {reqDeleteRows, reqQueryTable} from "../../api/table";
 
 export default () => {
+    const { RangePicker } = DatePicker;
+    const [tableData, setTableData] = useState([]);
+    const [formInitValues, setFormInitValues] = useState({});
+    let selectedArr = []
+    const getTableData = async () => {
+        let respTableData = await reqQueryTable(null,'/users/list');
+        setTableData(respTableData.d)
+    }
+    useEffect(() => {
+        getTableData()
+    }, []);
+
     const columns = [
         {
             title: 'Nickname',
             dataIndex: 'nickname',
             key: 'nickname',
-
+            align : 'center'
         },
         {
             title: 'Username',
             dataIndex: 'username',
             key: 'username',
-            render: (text) => {
-                return (<a>{text}</a>)
-            },
+            align : 'center',
+
         },
         {
             title: 'Mobile',
             dataIndex: 'mobile',
+            align : 'center',
+
             key: 'mobile',
         },
         {
             title: 'Password',
             dataIndex: 'password',
             key: 'password',
+            align : 'center',
+
         },
         {
             title: 'Gender',
             dataIndex: 'gender',
             key: 'gender',
-            render: text => text === 0 ? 'male' : 'female'
+            align : 'center',
+
+            render: text => text ? 'male' : 'female'
+        },
+        {
+            title: 'Last Login',
+            dataIndex: 'lastLogin$',
+            key: 'lastLogin',
+            align : 'center',
+
         },
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <a>Invite {record.name}</a>
-                    <a>Delete</a>
-                </Space>
-            ),
+            align : 'center',
+            fixed: 'right',
+            render: (_, value) => {
+                return (
+                    <Space size="middle">
+                        <a>Modify</a>
+                    </Space>
+                )
+            },
         },
     ];
-    const getdata = async () => {
-        let reqQueryTable1 = await reqQueryTable(null,'/users/list');
-        return reqQueryTable1.d;
-    }
 
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            tags: ['loser'],
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            age: 32,
-            address: 'Sydney No. 1 Lake Park',
-            tags: ['cool', 'teacher'],
-        },
-    ];
+
+
 
     const AdvancedSearchForm = () => {
         const {token} = theme.useToken();
         const [form] = Form.useForm();
-        const [expand, setExpand] = useState(false);
         const formStyle = {
             maxWidth: 'none',
             background: token.colorFillAlter,
             borderRadius: token.borderRadiusLG,
-            padding: 24,
+            paddingTop: 24,
+            paddingLeft: 24,
+            paddingRight: 24,
         };
         const getFields = () => {
-            const count = expand ? 10 : 6;
             const children = [];
-            for (let i = 0; i < count; i++) {
-                children.push(
-                    <Col span={8} key={i}>
-                        {i % 3 !== 1 ? (
-                            <Form.Item
-                                name={`field-${i}`}
-                                label={`Field ${i}`}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Input something!',
-                                    },
-                                ]}
-                            >
-                                <Input placeholder="placeholder"/>
-                            </Form.Item>
-                        ) : (
-                            <Form.Item
-                                name={`field-${i}`}
-                                label={`Field ${i}`}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Select something!',
-                                    },
-                                ]}
-                                initialValue="1"
-                            >
-                                <Select>
-                                    <Option value="1">
-                                        longlonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong
-                                    </Option>
-                                    <Option value="2">222</Option>
-                                </Select>
-                            </Form.Item>
-                        )}
-                    </Col>,
-                );
-            }
+            children.push(
+                <Col span={6} key={'1'}>
+                    <Form.Item
+                        name={`nickname`}
+                    >
+                        <Input placeholder="Nickname"/>
+                    </Form.Item>
+                </Col>,
+                <Col span={6} key={'2'}>
+                    <Form.Item
+                        name={`username`}
+                    >
+                        <Input placeholder="Username"/>
+                    </Form.Item>
+                </Col>,
+                <Col span={6} key={'5'}>
+                    <Form.Item
+                        name={`gender`}
+
+                    >
+                        <Select
+                            placeholder="gender"
+                            options={[
+                                {
+                                  value:null,
+                                  label:null
+                                },
+                                {
+                                    value: false,
+                                    label: 'Female',
+                                },{
+                                    value: true,
+                                    label: 'Male',
+                                },
+
+                            ]}
+                        />
+                    </Form.Item>
+                </Col>,
+                <Col span={6} key={'6'}>
+                    <Form.Item
+                        name={`last_login`}
+
+                    >
+                        <RangePicker />
+                    </Form.Item>
+                </Col>,
+
+            );
             return children;
         };
-        const onFinish = (values) => {
-            console.log('Received values of form: ', values);
+        const onFinish = async (values) => {
+
+            let reqQueryTable1 = await reqQueryTable(values,'/users/list');
+
+            setTableData(reqQueryTable1.d)
+            setFormInitValues(values)
         };
         return (
-            <Form form={form} name="advanced_search" style={formStyle} onFinish={onFinish}>
-                <Row gutter={24}>{getFields()}</Row>
-                <div
-                    style={{
-                        textAlign: 'right',
-                    }}
-                >
-                    <Space size="small">
-                        <Button type="primary" htmlType="submit">
-                            Search
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                form.resetFields();
-                            }}
-                        >
-                            Clear
-                        </Button>
-                        <a
+            <Form form={form} name="advanced_search"  style={formStyle}   onFinish={onFinish} initialValues={formInitValues} >
+                <Row>
+                    <Col span={20}>
+                        <Row gutter={24}>
+                            {getFields()}
+                        </Row>
+                    </Col>
+                    <Col span={4}>
+                        <div
                             style={{
-                                fontSize: 12,
-                            }}
-                            onClick={() => {
-                                setExpand(!expand);
+                                textAlign: 'right',
                             }}
                         >
-                            <DownOutlined rotate={expand ? 180 : 0}/> Collapse
-                        </a>
-                    </Space>
-                </div>
+                            <Space size="small">
+                                <Button type="primary" htmlType="submit">
+                                    Search
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        onFinish({})
+                                    }}
+                                >
+                                    Clear
+                                </Button>
+                            </Space>
+                        </div>
+                    </Col>
+                </Row>
+
+
             </Form>
         );
     };
+
+    const handleAdd = () => {
+        const newData = {
+            key: (tableData.length + 1) +'',
+
+        };
+        setTableData([newData, ...tableData ]);
+    };
+    const x = async () => {
+        if (selectedArr.length === 0) {
+            message.error("You have to choose rows.")
+        }
+        let tableData = await reqDeleteRows(selectedArr,'/users/delete')
+        let reqQueryTable1 = await reqQueryTable(formInitValues,'/users/list');
+        setTableData(reqQueryTable1.d)
+        setFormInitValues(formInitValues)
+        message.success(tableData.msg)
+    }
+    const handleDelete = () => {
+
+        x()
+
+    }
+
+    const onChange = (_,selectedRows) => {
+        selectedArr = selectedRows
+    }
     return (
         <div className={'normalTable'}>
             <AdvancedSearchForm/>
             <div className={'table-part'}>
                 <div className={'operation'}>
                     <div className="operation-normal">
-                        <Button type="primary">Add</Button>
+                        <Button type="primary" size={'middle'} onClick={handleAdd}>Add</Button>
 
-                        <Button danger type="primary">Delete</Button>
+                        <Button danger type="primary" size={'middle'} onClick={handleDelete}>Delete</Button>
                     </div>
                     <div className="operation-output" span={12}>
                         <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}/>
@@ -186,9 +229,14 @@ export default () => {
                 </div>
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={tableData}
                     bordered={true}
                     className={'main-table'}
+                    size={"small"}
+                    rowSelection={{
+                        fixed:true,
+                        onChange
+                    }}
                 />
             </div>
         </div>
