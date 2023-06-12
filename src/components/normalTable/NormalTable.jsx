@@ -52,7 +52,7 @@ export default () => {
             key: 'gender',
             align : 'center',
 
-            render: text => text ? 'male' : 'female'
+            render: text => text === undefined ? '' : text === 1 ? 'male' : 'female'
         },
         {
             title: 'Last Login',
