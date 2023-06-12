@@ -149,6 +149,7 @@ export default () => {
             return children;
         };
         const handleSearch = async (values) => {
+            //深拷贝,不只是拷贝对象引用地址,而是直接拷贝其属性
             let originVlues = Object.assign({},values)
             //模糊搜索,把所有前台展示columns发送回后台做sql拼接
             if (values.all !== undefined){
