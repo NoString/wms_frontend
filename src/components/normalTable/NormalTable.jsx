@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import './normalTable.css'
-import {Button, Col, Form, Input, message, Row, Select, Space, Table, Tag, theme, DatePicker} from "antd";
+import {Button, Col, Form, Input, message, Row, Select, Space, Table, Tag, theme, DatePicker, Popconfirm} from "antd";
 import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
@@ -37,7 +37,6 @@ export default () => {
             title: 'Mobile',
             dataIndex: 'mobile',
             align : 'center',
-
             key: 'mobile',
         },
         {
@@ -58,7 +57,7 @@ export default () => {
         {
             title: 'Last Login',
             dataIndex: 'lastLogin$',
-            key: 'lastLogin',
+            key: 'last_login',
             align : 'center',
 
         },
@@ -108,7 +107,7 @@ export default () => {
                         <Input placeholder="Username"/>
                     </Form.Item>
                 </Col>,
-                <Col span={6} key={'5'}>
+                <Col span={6} key={'3'}>
                     <Form.Item
                         name={`gender`}
 
@@ -132,7 +131,7 @@ export default () => {
                         />
                     </Form.Item>
                 </Col>,
-                <Col span={6} key={'6'}>
+                <Col span={6} key={'4'}>
                     <Form.Item
                         name={`last_login`}
 
@@ -140,19 +139,42 @@ export default () => {
                         <RangePicker />
                     </Form.Item>
                 </Col>,
-
+                <Col span={6} key={'5'}>
+                    <Form.Item
+                        name={`all`}>
+                        <Input placeholder="all"/>
+                    </Form.Item>
+                </Col>,
             );
             return children;
         };
-        const onFinish = async (values) => {
+        const handleSearch = async (values) => {
+            let originVlues = Object.assign({},values)
+            //模糊搜索,把所有前台展示columns发送回后台做sql拼接
+            if (values.all !== undefined){
+                let searchColumns = [];
+                columns.forEach((i) =>{
+                    searchColumns.push(i.key)
+                })
+                values.columns = searchColumns + '';
+            }
+
+            //格式化antd时间选择器内容
+
+            for (let value in values) {
+                if (values[value] instanceof Array) {
+                    values[value + '_date'] = values[value] +''
+                    values[value] = undefined
+                }
+            }
+
 
             let reqQueryTable1 = await reqQueryTable(values,'/users/list');
-
             setTableData(reqQueryTable1.d)
-            setFormInitValues(values)
+            setFormInitValues(originVlues)
         };
         return (
-            <Form form={form} name="advanced_search"  style={formStyle}   onFinish={onFinish} initialValues={formInitValues} >
+            <Form form={form} name="advanced_search"  style={formStyle}   onFinish={handleSearch} initialValues={formInitValues} >
                 <Row>
                     <Col span={20}>
                         <Row gutter={24}>
@@ -171,7 +193,7 @@ export default () => {
                                 </Button>
                                 <Button
                                     onClick={() => {
-                                        onFinish({})
+                                        handleSearch({})
                                     }}
                                 >
                                     Clear
@@ -193,9 +215,10 @@ export default () => {
         };
         setTableData([newData, ...tableData ]);
     };
-    const x = async () => {
+    const handleDelete = async () => {
         if (selectedArr.length === 0) {
             message.error("You have to choose rows.")
+            return
         }
         let tableData = await reqDeleteRows(selectedArr,'/users/delete')
         let reqQueryTable1 = await reqQueryTable(formInitValues,'/users/list');
@@ -203,11 +226,7 @@ export default () => {
         setFormInitValues(formInitValues)
         message.success(tableData.msg)
     }
-    const handleDelete = () => {
 
-        x()
-
-    }
 
     const onChange = (_,selectedRows) => {
         selectedArr = selectedRows
@@ -219,8 +238,15 @@ export default () => {
                 <div className={'operation'}>
                     <div className="operation-normal">
                         <Button type="primary" size={'middle'} onClick={handleAdd}>Add</Button>
-
-                        <Button danger type="primary" size={'middle'} onClick={handleDelete}>Delete</Button>
+                        <Popconfirm
+                            title="Delete rows"
+                            description="Are you sure to delete the rows?"
+                            onConfirm={handleDelete}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger type="primary" size={'middle'} >Delete</Button>
+                        </Popconfirm>
                     </div>
                     <div className="operation-output" span={12}>
                         <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}/>

@@ -47,7 +47,7 @@ export default () => {
             </Sider>
             <Layout>
                 <Header collapsed={collapsed} setCollapsed={setCollapsed}/>
-                <Content className={'layout-content'}>
+                <div className={'layout-content'}>
                     <Routes>
                         {<Route path={'dashboard'} element={<Dashboard/>}/>}
                         {<Route path={'chart'} element={<Chart/>}/>}
@@ -74,7 +74,7 @@ export default () => {
                         {<Route path={'profile'} element={<Profile/>}/>}
                         {<Route path={'/'} element={<Navigate to={'/dashboard'}/>}/>}
                     </Routes>
-                </Content>
+                </div>
                 <Footer className={'footer'}>
 
                         <p>
