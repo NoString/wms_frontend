@@ -1,17 +1,39 @@
 import React, {useEffect, useState} from "react";
 import './normalTable.css'
-import {Button, Col, Form, Input, message, Row, Select, Space, Table, Tag, theme, DatePicker, Popconfirm} from "antd";
+import {
+    Button,
+    Col,
+    Form,
+    Input,
+    message,
+    Row,
+    Select,
+    Space,
+    Table,
+    Tag,
+    theme,
+    DatePicker,
+    Popconfirm,
+    InputNumber, Modal, Pagination
+} from "antd";
 import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
 import InputSelect from "../inputSelect/InputSelect";
 import {reqInputSelect} from "../../api/inputSelect";
+import {useToken} from "antd/es/theme/internal";
+
 
 export default () => {
     const {RangePicker} = DatePicker;
     const [tableData, setTableData] = useState([]);
     const [formInitValues, setFormInitValues] = useState({});
+
+    //弹出层,用于添加和修改功能
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
 
     let selectedArr = []
     const getTableData = async () => {
@@ -219,12 +241,10 @@ export default () => {
     };
 
     const handleAdd = () => {
-        const newData = {
-            key: (tableData.length + 1) + '',
-
-        };
-        setTableData([newData, ...tableData]);
+        setIsModalOpen(true);
     };
+
+
     const handleDelete = async () => {
         if (selectedArr.length === 0) {
             message.error("You have to choose rows.")
@@ -241,6 +261,51 @@ export default () => {
     const onChange = (_, selectedRows) => {
         selectedArr = selectedRows
     }
+
+    const modalClose = () => {
+        setIsModalOpen(false);
+    }
+
+    const modalPrevious = () => {
+        setModalFormIndex(modalFormIndex - 1)
+
+    }
+
+    const modalMore = () => {
+
+        setModalFormCount(modalFormCount + 1)
+        setModalFormIndex(modalFormIndex + 1)
+    }
+
+    const [modalFormIndex, setModalFormIndex] = useState(0);
+    const [modalFormCount, setModalFormCount] = useState(0);
+    const [modalButtons, setModalButtons] = useState([
+        <Pagination simple defaultCurrent={2} total={50} size={"small"} style={{paddingBottom: "20px"}}/>,
+        <Button key="delete"
+                size={"middle"}
+                danger
+                type={"primary"}
+        >
+            Delete
+        </Button>,
+        <Button key="more"
+                size={"middle"}
+                onClick={modalMore}
+                type={"primary"}
+                style={{backgroundColor:'lightseagreen'}}
+        >
+            More
+        </Button>,
+        <Button key="save"
+                size={"middle"}
+                type={"primary"}
+        >
+
+            Save
+        </Button>,
+    ]);
+
+
     return (
         <div className={'normalTable'}>
             <AdvancedSearchForm/>
@@ -269,12 +334,21 @@ export default () => {
                     bordered={true}
                     className={'main-table'}
                     size={"small"}
+                    bordered
                     rowSelection={{
                         fixed: true,
                         onChange
                     }}
                 />
             </div>
+            <Modal title="Basic Modal"
+                   open={isModalOpen}
+                   footer={modalButtons}
+                   onCancel={modalClose}
+                   maskClosable={false}
+            >
+
+            </Modal>
         </div>
     )
 }
