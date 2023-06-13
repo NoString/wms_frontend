@@ -5,52 +5,59 @@ import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
+import InputSelect from "../inputSelect/InputSelect";
+import {reqInputSelect} from "../../api/inputSelect";
 
 export default () => {
-    const { RangePicker } = DatePicker;
+    const {RangePicker} = DatePicker;
     const [tableData, setTableData] = useState([]);
     const [formInitValues, setFormInitValues] = useState({});
+
     let selectedArr = []
     const getTableData = async () => {
-        let respTableData = await reqQueryTable(null,'/users/list');
+        let respTableData = await reqQueryTable(null, '/users/list');
         setTableData(respTableData.d)
     }
+
+
     useEffect(() => {
         getTableData()
+
     }, []);
+
 
     const columns = [
         {
             title: 'Nickname',
             dataIndex: 'nickname',
             key: 'nickname',
-            align : 'center'
+            align: 'center'
         },
         {
             title: 'Username',
             dataIndex: 'username',
             key: 'username',
-            align : 'center',
+            align: 'center',
 
         },
         {
             title: 'Mobile',
             dataIndex: 'mobile',
-            align : 'center',
+            align: 'center',
             key: 'mobile',
         },
         {
             title: 'Password',
             dataIndex: 'password',
             key: 'password',
-            align : 'center',
+            align: 'center',
 
         },
         {
             title: 'Gender',
             dataIndex: 'gender',
             key: 'gender',
-            align : 'center',
+            align: 'center',
 
             render: text => text === undefined ? '' : text === 1 ? 'male' : 'female'
         },
@@ -58,13 +65,13 @@ export default () => {
             title: 'Last Login',
             dataIndex: 'lastLogin$',
             key: 'last_login',
-            align : 'center',
+            align: 'center',
 
         },
         {
             title: 'Action',
             key: 'action',
-            align : 'center',
+            align: 'center',
             fixed: 'right',
             render: (_, value) => {
                 return (
@@ -75,8 +82,6 @@ export default () => {
             },
         },
     ];
-
-
 
 
     const AdvancedSearchForm = () => {
@@ -116,13 +121,13 @@ export default () => {
                             placeholder="gender"
                             options={[
                                 {
-                                  value:null,
-                                  label:null
+                                    value: null,
+                                    label: null
                                 },
                                 {
                                     value: false,
                                     label: 'Female',
-                                },{
+                                }, {
                                     value: true,
                                     label: 'Male',
                                 },
@@ -133,10 +138,8 @@ export default () => {
                 </Col>,
                 <Col span={6} key={'4'}>
                     <Form.Item
-                        name={`last_login`}
-
-                    >
-                        <RangePicker />
+                        name={`last_login`}>
+                        <RangePicker/>
                     </Form.Item>
                 </Col>,
                 <Col span={6} key={'5'}>
@@ -145,16 +148,22 @@ export default () => {
                         <Input placeholder="all"/>
                     </Form.Item>
                 </Col>,
+                <Col span={6} key={'6'}>
+                    <Form.Item
+                        name={`role_id`}>
+                        <InputSelect/>
+                    </Form.Item>
+                </Col>,
             );
             return children;
         };
         const handleSearch = async (values) => {
-            //深拷贝,不只是拷贝对象引用地址,而是直接拷贝其属性
-            let originVlues = Object.assign({},values)
+
+
             //模糊搜索,把所有前台展示columns发送回后台做sql拼接
-            if (values.all !== undefined){
+            if (values.all !== undefined) {
                 let searchColumns = [];
-                columns.forEach((i) =>{
+                columns.forEach((i) => {
                     searchColumns.push(i.key)
                 })
                 values.columns = searchColumns + '';
@@ -164,18 +173,18 @@ export default () => {
 
             for (let value in values) {
                 if (values[value] instanceof Array) {
-                    values[value + '_date'] = values[value] +''
+                    values[value + '_date'] = values[value] + ''
                     values[value] = undefined
                 }
             }
 
 
-            let reqQueryTable1 = await reqQueryTable(values,'/users/list');
+            let reqQueryTable1 = await reqQueryTable(values, '/users/list');
             setTableData(reqQueryTable1.d)
-            setFormInitValues(originVlues)
         };
         return (
-            <Form form={form} name="advanced_search"  style={formStyle}   onFinish={handleSearch} initialValues={formInitValues} >
+            <Form form={form} name="advanced_search" style={formStyle} onFinish={handleSearch}
+                  initialValues={formInitValues}>
                 <Row>
                     <Col span={20}>
                         <Row gutter={24}>
@@ -211,25 +220,25 @@ export default () => {
 
     const handleAdd = () => {
         const newData = {
-            key: (tableData.length + 1) +'',
+            key: (tableData.length + 1) + '',
 
         };
-        setTableData([newData, ...tableData ]);
+        setTableData([newData, ...tableData]);
     };
     const handleDelete = async () => {
         if (selectedArr.length === 0) {
             message.error("You have to choose rows.")
             return
         }
-        let tableData = await reqDeleteRows(selectedArr,'/users/delete')
-        let reqQueryTable1 = await reqQueryTable(formInitValues,'/users/list');
+        let tableData = await reqDeleteRows(selectedArr, '/users/delete')
+        let reqQueryTable1 = await reqQueryTable(formInitValues, '/users/list');
         setTableData(reqQueryTable1.d)
         setFormInitValues(formInitValues)
         message.success(tableData.msg)
     }
 
 
-    const onChange = (_,selectedRows) => {
+    const onChange = (_, selectedRows) => {
         selectedArr = selectedRows
     }
     return (
@@ -246,7 +255,7 @@ export default () => {
                             okText="Yes"
                             cancelText="No"
                         >
-                            <Button danger type="primary" size={'middle'} >Delete</Button>
+                            <Button danger type="primary" size={'middle'}>Delete</Button>
                         </Popconfirm>
                     </div>
                     <div className="operation-output" span={12}>
@@ -261,7 +270,7 @@ export default () => {
                     className={'main-table'}
                     size={"small"}
                     rowSelection={{
-                        fixed:true,
+                        fixed: true,
                         onChange
                     }}
                 />

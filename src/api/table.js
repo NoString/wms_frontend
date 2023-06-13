@@ -1,7 +1,6 @@
 import ajax from "./ajax";
 
 export const reqQueryTable = (require,path) => {
-
     return ajax(path,require)
 }
 
