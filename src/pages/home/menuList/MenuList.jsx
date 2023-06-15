@@ -1,162 +1,167 @@
-import {Form, Input, InputNumber, Popconfirm, Table, Typography} from 'antd';
-import {useState} from 'react';
-
-const originData = [];
-for (let i = 0; i < 100; i++) {
-    originData.push({
-        key: i.toString(),
-        name: `Edward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`,
+import { SmileOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Form, Input, InputNumber, Modal, Typography } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import {useForm} from "antd/es/form/Form";
+const layout = {
+    labelCol: {
+        span: 8,
+    },
+    wrapperCol: {
+        span: 16,
+    },
+};
+const tailLayout = {
+    wrapperCol: {
+        offset: 8,
+        span: 16,
+    },
+};
+// reset form fields when modal is form, closed
+const useResetFormOnCloseModal = ({ form, open }) => {
+    const prevOpenRef = useRef();
+    useEffect(() => {
+        prevOpenRef.current = open;
+    }, [open]);
+    const prevOpen = prevOpenRef.current;
+    useEffect(() => {
+        if (!open && prevOpen) {
+            form.resetFields();
+        }
+    }, [form, prevOpen, open]);
+};
+const ModalForm = ({ open, onCancel }) => {
+    const [form] = Form.useForm();
+    useResetFormOnCloseModal({
+        form,
+        open,
     });
-}
-const EditableCell = ({
-                          editing,
-                          dataIndex,
-                          title,
-                          inputType,
-                          record,
-                          index,
-                          children,
-                          ...restProps
-                      }) => {
-    const inputNode = inputType === 'number' ? <InputNumber/> : <Input/>;
+    const onOk = () => {
+        console.log(form);
+        form.submit();
+    };
     return (
-        <td {...restProps}>
-            {editing ? (
+        <Modal title="Basic Drawer" open={open} onOk={onOk} onCancel={onCancel}>
+            <Form form={form} layout="vertical" name="userForm">
                 <Form.Item
-                    name={dataIndex}
-                    style={{
-                        margin: 0,
-                    }}
+                    name="name"
+                    label="User Name"
                     rules={[
                         {
                             required: true,
-                            message: `Please Input ${title}!`,
                         },
                     ]}
                 >
-                    {inputNode}
+                    <Input />
                 </Form.Item>
-            ) : (
-                children
-            )}
-        </td>
+                <Form.Item
+                    name="age"
+                    label="User Age"
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                >
+                    <InputNumber />
+                </Form.Item>
+            </Form>
+        </Modal>
     );
 };
-export default () => {
-    const [form] = Form.useForm();
-    const [data, setData] = useState(originData);
-    const [editingKey, setEditingKey] = useState('');
-    const isEditing = (record) => record.key === editingKey;
-    const edit = (record) => {
-        form.setFieldsValue({
-            ...record,
-        });
-        setEditingKey(record.key);
+const App = () => {
+    const [form] = Form.useForm()
+
+    const [open, setOpen] = useState(false);
+    const showUserModal = () => {
+        setOpen(true);
     };
-    const cancel = () => {
-        setEditingKey('');
+    const hideUserModal = () => {
+        setOpen(false);
     };
-    const save = async (key) => {
-        try {
-            const row = await form.validateFields();
-            const newData = [...data];
-            const index = newData.findIndex((item) => key === item.key);
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-                setData(newData);
-                setEditingKey('');
-            } else {
-                newData.push(row);
-                setData(newData);
-                setEditingKey('');
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
-        }
+    const onFinish = (values) => {
+        console.log('Finish:', values);
     };
-    const columns = [
-        {
-            title: 'name',
-            dataIndex: 'name',
-            width: '25%',
-            editable: true,
-        },
-        {
-            title: 'age',
-            dataIndex: 'age',
-            width: '15%',
-            editable: true,
-        },
-        {
-            title: 'address',
-            dataIndex: 'address',
-            width: '40%',
-            editable: true,
-        },
-        {
-            title: 'operation',
-            dataIndex: 'operation',
-            render: (_, record) => {
-                const editable = isEditing(record);
-                return editable ? (
-                    <span>
-            <Typography.Link
-                onClick={() => save(record.key)}
-                style={{
-                    marginRight: 8,
-                }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-                ) : (
-                    <Typography.Link  onClick={() => edit(record)}>
-                        Edit
-                    </Typography.Link>
-                );
-            },
-        },
-    ];
-    const mergedColumns = columns.map((col) => {
-        if (!col.editable) {
-            return col;
-        }
-        return {
-            ...col,
-            onCell: (record) => ({
-                record,
-                inputType: col.dataIndex === 'age' ? 'number' : 'text',
-                dataIndex: col.dataIndex,
-                title: col.title,
-                editing: isEditing(record),
-            }),
-        };
-    });
+    const checkForm = async (value1) => {
+        console.log(value1);
+        await console.log(form.validateFields());
+    }
     return (
-        <Form form={form} component={false}>
-            <Table
-                components={{
-                    body: {
-                        cell: EditableCell,
-                    },
+        <Form.Provider
+            onFormFinish={(name, { values, forms }) => {
+                if (name === 'userForm') {
+                    const { basicForm } = forms;
+                    const users = basicForm.getFieldValue('users') || [];
+                    basicForm.setFieldsValue({
+                        users: [...users, values],
+                    });
+                    setOpen(false);
+                }
+            }}
+        >
+            <Form
+                {...layout}
+                name="basicForm"
+                onFinish={onFinish}
+                style={{
+                    maxWidth: 600,
                 }}
-                bordered
-                dataSource={data}
-                columns={mergedColumns}
-                rowClassName="editable-row"
-                pagination={{
-                    onChange: cancel,
-                }}
-            />
-        </Form>
+                form={form}
+            >
+                <Form.Item
+                    name="group"
+                    label="Group Name"
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                >
+                    <Input />
+                </Form.Item>
+                <Form.Item
+                    label="User List"
+                    shouldUpdate={(prevValues, curValues) => prevValues.users !== curValues.users}
+                >
+                    {({ getFieldValue }) => {
+                        const users = getFieldValue('users') || [];
+                        return users.length ? (
+                            <ul>
+                                {users.map((user) => (
+                                    <li key={user.name} className="user">
+                                        <Avatar icon={<UserOutlined />} />
+                                        {user.name} - {user.age}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <Typography.Text className="ant-form-text" type="secondary">
+                                ( <SmileOutlined /> No user yet. )
+                            </Typography.Text>
+                        );
+                    }}
+                </Form.Item>
+                <Form.Item {...tailLayout}>
+                    <Button htmlType="submit" type="primary">
+                        Submit
+                    </Button>
+                    <Button  type="primary" onClick={checkForm}>
+                        check
+                    </Button>
+                    <Button
+                        htmlType="button"
+                        style={{
+                            margin: '0 8px',
+                        }}
+                        onClick={showUserModal}
+                    >
+                        Add User
+                    </Button>
+                </Form.Item>
+            </Form>
+
+
+            <ModalForm open={open} onCancel={hideUserModal} />
+        </Form.Provider>
     );
 };
+export default App;

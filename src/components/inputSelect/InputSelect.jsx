@@ -9,7 +9,7 @@ export default (props) => {
         let data = await reqInputSelect('/role/query');
         setData([{
             label: '',
-            value: null
+            value: ''
         }, ...data.d])
         return data;
     }
@@ -19,10 +19,10 @@ export default (props) => {
 
     return (
         <Select
-
             options={data}
             onChange={props.onChange}
             placeholder={'role'}
+            defaultValue={props.defaultValue}
         />
     )
 }

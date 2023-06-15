@@ -3,7 +3,6 @@ import './dynamicTable.css'
 import {
     Button,
     Col,
-    Form,
     Input,
     message,
     Row,
@@ -14,7 +13,7 @@ import {
     theme,
     DatePicker,
     Popconfirm,
-    InputNumber, Modal, Pagination, Carousel, Calendar, Divider
+    InputNumber, Modal, Pagination, Carousel, Calendar, Divider, Form
 } from "antd";
 import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
@@ -23,9 +22,16 @@ import {reqDeleteRows, reqQueryTable} from "../../api/table";
 import InputSelect from "../inputSelect/InputSelect";
 import {reqInputSelect} from "../../api/inputSelect";
 import {useToken} from "antd/es/theme/internal";
+import {useForm} from "antd/es/form/Form";
 
 
 export default () => {
+    Array.prototype.remove = function (val) {
+        var index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
+    };
     const {RangePicker} = DatePicker;
     //后端传来的data
     const [tableData, setTableData] = useState([]);
@@ -43,8 +49,10 @@ export default () => {
 
     const [modalFormCurrent, setModalFormCurrent] = useState(1);
 
+    //多选框选中的arr
+    const [selectedArr, setSelectedArr] = useState([]);
 
-    let selectedArr = []
+    const modalFormDatas = [];
 
 
     const getTableData = async () => {
@@ -124,6 +132,112 @@ export default () => {
         },
     ];
 
+
+    const form = useRef();
+    const AdvancedModalForm = (key, data) => {
+
+        return (
+
+            <Form
+                labelCol={{
+                    span: 6,
+                }}
+                wrapperCol={{
+                    span: 18,
+                }}
+                name="advanced_modal"
+                labelAlign={'right'}
+                key={key}
+                ref={form}
+            >
+                <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
+
+                <Form.Item
+                    label="Nickname"
+                    name="nickname"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your nickname!',
+                        },
+                    ]}
+                >
+                    <Input value={data === undefined ? null : data.nickname}/>
+                </Form.Item>
+
+                <Form.Item
+                    label="Username"
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input value={data === undefined ? null : data.username}/>
+                </Form.Item>
+                <Form.Item
+                    label="Mobile"
+                    name="mobile"
+                >
+                    <Input value={data === undefined ? null : data.mobile}/>
+                </Form.Item>
+
+
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your password!',
+                        },
+                    ]}
+                >
+                    <Input value={data === undefined ? null : data.password}/>
+                </Form.Item>
+
+                <Form.Item
+                    name={`gender`}
+                    label={'Gender'}
+                >
+                    <Select
+                        placeholder="gender"
+                        value={data === undefined ? null : data.gender}
+                        options={[
+                            {
+                                value: null,
+                                label: ''
+                            },
+                            {
+                                value: false,
+                                label: 'Female',
+                            }, {
+                                value: true,
+                                label: 'Male',
+                            },
+
+                        ]}
+                    />
+
+                </Form.Item>
+                <Form.Item
+                    name={`role_id`}
+                    label={'role'}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your role!',
+                        },
+                    ]}
+                >
+                    <InputSelect defaultValue={data === undefined ? null : data.role}/>
+                </Form.Item>
+            </Form>
+
+        )
+    }
 
     const AdvancedSearchForm = () => {
         const {token} = theme.useToken();
@@ -259,8 +373,9 @@ export default () => {
         );
     };
 
-    const handleAdd = () => {
+    const handleAddButton = () => {
         setIsModalOpen(true);
+        setModalFormContentPages([AdvancedModalForm(modalFormCount + '')])
     };
 
 
@@ -278,133 +393,28 @@ export default () => {
 
 
     const onChange = (_, selectedRows) => {
-        selectedArr = selectedRows
+        setSelectedArr(selectedRows)
     }
 
-    const modalClose = () => {
-        setIsModalOpen(false);
-    }
 
-    const modalPrevious = () => {
-
-
-    }
-    const modalFormContent = (
-        <div>
-
-
-            <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
-            <Form
-                labelCol={{
-                    span: 6,
-                }}
-                wrapperCol={{
-                    span: 18,
-                }}
-                labelAlign={'right'}
-            >
-
-                <Form.Item
-                    label="Nickname"
-                    name="nickname"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-                </Form.Item>
-
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Mobile"
-                    name="mobile"
-                    rules={[
-                        {
-                            type: "number",
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    name={`gender`}
-                    label={'Gender'}
-                >
-                    <Select
-                        placeholder="gender"
-                        options={[
-                            {
-                                value: null,
-                                label: null
-                            },
-                            {
-                                value: false,
-                                label: 'Female',
-                            }, {
-                                value: true,
-                                label: 'Male',
-                            },
-
-                        ]}
-                    />
-                </Form.Item>
-                <Form.Item
-                    name={`role_id`}
-                    label={'role'}
-                >
-                    <InputSelect/>
-                </Form.Item>
-            </Form>
-        </div>
-    );
-    const [modalFormContents, setModalFormContents] = useState([modalFormContent]);
+    const [modalFormContentPages, setModalFormContentPages] = useState([]);
     const carouselRef = useRef();
+    const modalClose = async () => {
+        setIsModalOpen(false);
+        setModalFormContentPages([])
+        setModalFormCount(1)
+        setModalFormCurrent(1)
 
+    }
     const modalMore = async () => {
+        if (modalFormCount >= 10) {
+            message.error('The pages can not be more than TEN !')
+            return;
+        }
         let nowCurrent = modalFormCount + 1;
         setModalFormCount(nowCurrent)
         setModalFormCurrent(nowCurrent)
-        await setModalFormContents([...modalFormContents, modalFormContent])
+        await setModalFormContentPages([...modalFormContentPages, AdvancedModalForm(modalFormCount + '')])
         carouselRef.current.goTo(nowCurrent - 1);
     }
 
@@ -412,21 +422,18 @@ export default () => {
         setModalFormCurrent(page)
         carouselRef.current.goTo(page - 1);
     }
-    const modalDelete = () => {
-        if (modalFormCount === 1) {
-            message.error('you can not delete the last page!');
-            return;
-        }
-        // let nowCount = modalFormCount - 1;
-        // setModalFormCount(nowCount)
-        //
-        // setModalFormCurrent(modalFormCount === modalFormCurrent ? modalFormCurrent - 1 : modalFormCurrent)
-    }
+
+
     const handleDotChange = (current) => {
         setModalFormCurrent(current + 1)
     }
+
+    const handleModalSaveButton = (value) => {
+    }
+
     const modalButtons = [
         <Pagination
+            key={'pagination'}
             simple
             defaultCurrent={1}
             defaultPageSize={1}
@@ -437,14 +444,6 @@ export default () => {
             hideOnSinglePage={true}
             onChange={modalFormIndexChange}
         />,
-        <Button key="delete"
-                size={"middle"}
-                danger
-                type={"primary"}
-                onClick={modalDelete}
-        >
-            Delete
-        </Button>,
         <Button key="more"
                 size={"middle"}
                 onClick={modalMore}
@@ -456,11 +455,37 @@ export default () => {
         <Button key="save"
                 size={"middle"}
                 type={"primary"}
+                onClick={handleModalSaveButton}
+
         >
 
             Save
         </Button>,
     ]
+
+    const handleEdit = async () => {
+
+        if (selectedArr.length <= 0) {
+            message.error("You must choose one row!")
+            return;
+        }
+        if (selectedArr.length > 10) {
+            message.error("The choice of maximum is 10 rows.")
+            return;
+        }
+        let pages = []
+        selectedArr.map((data, index) => {
+            pages.push(AdvancedModalForm(index + '', data))
+
+        })
+        setIsModalOpen(true);
+
+        setModalFormContentPages([...pages])
+        setModalFormCount(selectedArr.length)
+        setModalFormCurrent(1)
+
+
+    }
 
 
     return (
@@ -469,9 +494,9 @@ export default () => {
             <div className={'table-part'}>
                 <div className={'operation'}>
                     <div className="operation-normal">
-                        <Button type="primary" size={'middle'} onClick={handleAdd}>Add</Button>
+                        <Button type="primary" size={'middle'} onClick={handleAddButton}>Add</Button>
                         <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
-                                onClick={handleAdd}>Edit</Button>
+                                onClick={handleEdit}>Edit</Button>
                         <Popconfirm
                             title="Delete rows"
                             description="Are you sure to delete the rows?"
@@ -511,11 +536,13 @@ export default () => {
                 footer={modalButtons}
                 onCancel={modalClose}
                 maskClosable={false}
+                destroyOnClose={true}
             >
                 <Carousel dots={true} ref={carouselRef}
-                          afterChange={handleDotChange}>
-                    {modalFormContents.map((item) => {
-                        return item
+                          afterChange={handleDotChange}
+                >
+                    {modalFormContentPages.map((item) => {
+                        return (item)
                     })}
                 </Carousel>
             </Modal>
