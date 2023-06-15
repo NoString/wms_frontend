@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import './normalTable.css'
+import React, {useEffect, useRef, useState} from "react";
+import './dynamicTable.css'
 import {
     Button,
     Col,
@@ -14,7 +14,7 @@ import {
     theme,
     DatePicker,
     Popconfirm,
-    InputNumber, Modal, Pagination
+    InputNumber, Modal, Pagination, Carousel, Calendar, Divider
 } from "antd";
 import Search from "antd/es/input/Search";
 import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
@@ -27,17 +27,29 @@ import {useToken} from "antd/es/theme/internal";
 
 export default () => {
     const {RangePicker} = DatePicker;
+    //后端传来的data
     const [tableData, setTableData] = useState([]);
+
     const [formInitValues, setFormInitValues] = useState({});
 
-    //弹出层,用于添加和修改功能
+    //页面是否正在从后台加载数据
+    const [pageLoading, setPageLoading] = useState(true);
+
+    //是否显示add和edit弹出层
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    //add和edit时的总页数
+    const [modalFormCount, setModalFormCount] = useState(1);
+
+    const [modalFormCurrent, setModalFormCurrent] = useState(1);
 
 
     let selectedArr = []
+
+
     const getTableData = async () => {
         let respTableData = await reqQueryTable(null, '/users/list');
+        setPageLoading(false)
         setTableData(respTableData.d)
     }
 
@@ -87,6 +99,13 @@ export default () => {
             title: 'Last Login',
             dataIndex: 'lastLogin$',
             key: 'last_login',
+            align: 'center',
+
+        },
+        {
+            title: 'Role',
+            dataIndex: 'role',
+            key: 'role',
             align: 'center',
 
         },
@@ -206,7 +225,7 @@ export default () => {
         };
         return (
             <Form form={form} name="advanced_search" style={formStyle} onFinish={handleSearch}
-                  initialValues={formInitValues}>
+            >
                 <Row>
                     <Col span={20}>
                         <Row gutter={24}>
@@ -267,24 +286,162 @@ export default () => {
     }
 
     const modalPrevious = () => {
-        setModalFormIndex(modalFormIndex - 1)
+
 
     }
+    const modalFormContent = (
+        <div>
 
-    const modalMore = () => {
 
-        setModalFormCount(modalFormCount + 1)
-        setModalFormIndex(modalFormIndex + 1)
+            <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
+            <Form
+                labelCol={{
+                    span: 6,
+                }}
+                wrapperCol={{
+                    span: 18,
+                }}
+                labelAlign={'right'}
+            >
+
+                <Form.Item
+                    label="Nickname"
+                    name="nickname"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input/>
+                </Form.Item>
+
+                <Form.Item
+                    label="Username"
+                    name="username"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    label="Mobile"
+                    name="mobile"
+                    rules={[
+                        {
+                            type: "number",
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your username!',
+                        },
+                    ]}
+                >
+                    <Input/>
+                </Form.Item>
+                <Form.Item
+                    name={`gender`}
+                    label={'Gender'}
+                >
+                    <Select
+                        placeholder="gender"
+                        options={[
+                            {
+                                value: null,
+                                label: null
+                            },
+                            {
+                                value: false,
+                                label: 'Female',
+                            }, {
+                                value: true,
+                                label: 'Male',
+                            },
+
+                        ]}
+                    />
+                </Form.Item>
+                <Form.Item
+                    name={`role_id`}
+                    label={'role'}
+                >
+                    <InputSelect/>
+                </Form.Item>
+            </Form>
+        </div>
+    );
+    const [modalFormContents, setModalFormContents] = useState([modalFormContent]);
+    const carouselRef = useRef();
+
+    const modalMore = async () => {
+        let nowCurrent = modalFormCount + 1;
+        setModalFormCount(nowCurrent)
+        setModalFormCurrent(nowCurrent)
+        await setModalFormContents([...modalFormContents, modalFormContent])
+        carouselRef.current.goTo(nowCurrent - 1);
     }
 
-    const [modalFormIndex, setModalFormIndex] = useState(0);
-    const [modalFormCount, setModalFormCount] = useState(0);
-    const [modalButtons, setModalButtons] = useState([
-        <Pagination simple defaultCurrent={2} total={50} size={"small"} style={{paddingBottom: "20px"}}/>,
+    const modalFormIndexChange = (page, pageSize) => {
+        setModalFormCurrent(page)
+        carouselRef.current.goTo(page - 1);
+    }
+    const modalDelete = () => {
+        if (modalFormCount === 1) {
+            message.error('you can not delete the last page!');
+            return;
+        }
+        // let nowCount = modalFormCount - 1;
+        // setModalFormCount(nowCount)
+        //
+        // setModalFormCurrent(modalFormCount === modalFormCurrent ? modalFormCurrent - 1 : modalFormCurrent)
+    }
+    const handleDotChange = (current) => {
+        setModalFormCurrent(current + 1)
+    }
+    const modalButtons = [
+        <Pagination
+            simple
+            defaultCurrent={1}
+            defaultPageSize={1}
+            current={modalFormCurrent}
+            total={modalFormCount}
+            size={"small"}
+            style={{paddingBottom: "20px"}}
+            hideOnSinglePage={true}
+            onChange={modalFormIndexChange}
+        />,
         <Button key="delete"
                 size={"middle"}
                 danger
                 type={"primary"}
+                onClick={modalDelete}
         >
             Delete
         </Button>,
@@ -292,7 +449,7 @@ export default () => {
                 size={"middle"}
                 onClick={modalMore}
                 type={"primary"}
-                style={{backgroundColor:'lightseagreen'}}
+                style={{backgroundColor: 'lightseagreen'}}
         >
             More
         </Button>,
@@ -303,7 +460,7 @@ export default () => {
 
             Save
         </Button>,
-    ]);
+    ]
 
 
     return (
@@ -313,6 +470,8 @@ export default () => {
                 <div className={'operation'}>
                     <div className="operation-normal">
                         <Button type="primary" size={'middle'} onClick={handleAdd}>Add</Button>
+                        <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
+                                onClick={handleAdd}>Edit</Button>
                         <Popconfirm
                             title="Delete rows"
                             description="Are you sure to delete the rows?"
@@ -331,23 +490,34 @@ export default () => {
                 <Table
                     columns={columns}
                     dataSource={tableData}
-                    bordered={true}
                     className={'main-table'}
+                    loading={pageLoading}
                     size={"small"}
+
                     bordered
+                    pagination={{
+                        hideOnSinglePage: true,
+                        size: "default"
+                    }}
                     rowSelection={{
                         fixed: true,
                         onChange
                     }}
                 />
             </div>
-            <Modal title="Basic Modal"
-                   open={isModalOpen}
-                   footer={modalButtons}
-                   onCancel={modalClose}
-                   maskClosable={false}
-            >
 
+            <Modal
+                open={isModalOpen}
+                footer={modalButtons}
+                onCancel={modalClose}
+                maskClosable={false}
+            >
+                <Carousel dots={true} ref={carouselRef}
+                          afterChange={handleDotChange}>
+                    {modalFormContents.map((item) => {
+                        return item
+                    })}
+                </Carousel>
             </Modal>
         </div>
     )

@@ -30,5 +30,7 @@
 }
 .normalTable .table-part .main-table {
   margin-top: 0.5%;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
 }
-/*# sourceMappingURL=normalTable.css.map */
+/*# sourceMappingURL=dynamicTable.css.map */

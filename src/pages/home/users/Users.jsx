@@ -1,11 +1,11 @@
 import React from "react";
 import './users.css'
-import NormalTable from "../../../components/normalTable/NormalTable";
+import DynamicTable from "../../../components/normalTable/DynamicTable";
 export default () =>{
 
     return(
         <div className = {'users'}>
-            <NormalTable/>
+            <DynamicTable/>
         </div>
     )
 }
