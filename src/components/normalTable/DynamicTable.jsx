@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {createRef, useEffect, useRef, useState} from "react";
 import './dynamicTable.css'
 import {
     Button,
@@ -23,9 +23,10 @@ import InputSelect from "../inputSelect/InputSelect";
 import {reqInputSelect} from "../../api/inputSelect";
 import {useToken} from "antd/es/theme/internal";
 import {useForm} from "antd/es/form/Form";
+import MultiAddModal from "./multiAddButton/MultiAddModal";
 
 
-export default () => {
+const DynamicTable = () => {
     Array.prototype.remove = function (val) {
         var index = this.indexOf(val);
         if (index > -1) {
@@ -52,7 +53,8 @@ export default () => {
     //多选框选中的arr
     const [selectedArr, setSelectedArr] = useState([]);
 
-    const modalFormDatas = [];
+    //是否为添加data
+    const [isAddData, setIsAddData] = useState(true);
 
 
     const getTableData = async () => {
@@ -100,8 +102,7 @@ export default () => {
             dataIndex: 'gender',
             key: 'gender',
             align: 'center',
-
-            render: text => text === undefined ? '' : text === 1 ? 'male' : 'female'
+            render: text => text === undefined ? '' : text === true ? 'male' : 'female'
         },
         {
             title: 'Last Login',
@@ -133,28 +134,14 @@ export default () => {
     ];
 
 
-    const form = useRef();
-    const AdvancedModalForm = (key, data) => {
-
+    const [modalForm] = Form.useForm()
+    const AdvancedModalForm = (key) => {
         return (
-
-            <Form
-                labelCol={{
-                    span: 6,
-                }}
-                wrapperCol={{
-                    span: 18,
-                }}
-                name="advanced_modal"
-                labelAlign={'right'}
-                key={key}
-                ref={form}
-            >
-                <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
-
+            <div key={key}>
+                {}
                 <Form.Item
                     label="Nickname"
-                    name="nickname"
+                    name={["nickname-" + key]}
                     rules={[
                         {
                             required: true,
@@ -162,12 +149,14 @@ export default () => {
                         },
                     ]}
                 >
-                    <Input value={data === undefined ? null : data.nickname}/>
+                    <Input/>
+
+
                 </Form.Item>
 
                 <Form.Item
                     label="Username"
-                    name="username"
+                    name={["username-" + key]}
                     rules={[
                         {
                             required: true,
@@ -175,37 +164,41 @@ export default () => {
                         },
                     ]}
                 >
-                    <Input value={data === undefined ? null : data.username}/>
+                    <Input/>
+
                 </Form.Item>
+
                 <Form.Item
                     label="Mobile"
-                    name="mobile"
+                    name={"mobile-" + key}
                 >
-                    <Input value={data === undefined ? null : data.mobile}/>
+                    <Input/>
                 </Form.Item>
 
 
                 <Form.Item
                     label="Password"
-                    name="password"
+                    name={"password-" + key}
+
                     rules={[
                         {
                             required: true,
                             message: 'Please input your password!',
                         },
-                    ]}
-                >
-                    <Input value={data === undefined ? null : data.password}/>
-                </Form.Item>
+                    ]}>
+                    <Input/>
 
+                </Form.Item>
                 <Form.Item
-                    name={`gender`}
+                    name={`gender-` + key}
                     label={'Gender'}
                 >
                     <Select
+
                         placeholder="gender"
-                        value={data === undefined ? null : data.gender}
+
                         options={[
+
                             {
                                 value: null,
                                 label: ''
@@ -217,13 +210,12 @@ export default () => {
                                 value: true,
                                 label: 'Male',
                             },
-
                         ]}
                     />
-
                 </Form.Item>
+
                 <Form.Item
-                    name={`role_id`}
+                   name={`role_id-` + key}
                     label={'role'}
                     rules={[
                         {
@@ -232,9 +224,11 @@ export default () => {
                         },
                     ]}
                 >
-                    <InputSelect defaultValue={data === undefined ? null : data.role}/>
+                <Input/>
+                    <InputSelect />
                 </Form.Item>
-            </Form>
+
+            </div>
 
         )
     }
@@ -374,14 +368,17 @@ export default () => {
     };
 
     const handleAddButton = () => {
+        // setIsModalOpen(true);
         setIsModalOpen(true);
-        setModalFormContentPages([AdvancedModalForm(modalFormCount + '')])
+
+
+        // setModalFormContentPages([AdvancedModalForm(modalFormCount + '')])
     };
 
 
     const handleDelete = async () => {
         if (selectedArr.length === 0) {
-            message.error("You have to choose rows.")
+            message.error("You must choose one row!")
             return
         }
         let tableData = await reqDeleteRows(selectedArr, '/users/delete')
@@ -404,7 +401,7 @@ export default () => {
         setModalFormContentPages([])
         setModalFormCount(1)
         setModalFormCurrent(1)
-
+        setModalFormData({})
     }
     const modalMore = async () => {
         if (modalFormCount >= 10) {
@@ -414,7 +411,7 @@ export default () => {
         let nowCurrent = modalFormCount + 1;
         setModalFormCount(nowCurrent)
         setModalFormCurrent(nowCurrent)
-        await setModalFormContentPages([...modalFormContentPages, AdvancedModalForm(modalFormCount + '')])
+        await setModalFormContentPages([...modalFormContentPages, AdvancedModalForm(nowCurrent + '')])
         carouselRef.current.goTo(nowCurrent - 1);
     }
 
@@ -426,9 +423,6 @@ export default () => {
 
     const handleDotChange = (current) => {
         setModalFormCurrent(current + 1)
-    }
-
-    const handleModalSaveButton = (value) => {
     }
 
     const modalButtons = [
@@ -455,16 +449,19 @@ export default () => {
         <Button key="save"
                 size={"middle"}
                 type={"primary"}
-                onClick={handleModalSaveButton}
+                onClick={() => {
+                    modalForm.submit()
+                }}
 
         >
 
             Save
         </Button>,
     ]
+    const newFormData = {};
+    const [modalFormData, setModalFormData] = useState({});
 
     const handleEdit = async () => {
-
         if (selectedArr.length <= 0) {
             message.error("You must choose one row!")
             return;
@@ -475,16 +472,27 @@ export default () => {
         }
         let pages = []
         selectedArr.map((data, index) => {
-            pages.push(AdvancedModalForm(index + '', data))
-
+            for (let dataKey in data) {
+                newFormData[dataKey + "-" + index] = data[dataKey]
+            }
+            pages.push(AdvancedModalForm(index + ''))
         })
+        setModalFormData(newFormData)
         setIsModalOpen(true);
-
         setModalFormContentPages([...pages])
         setModalFormCount(selectedArr.length)
         setModalFormCurrent(1)
 
 
+    }
+    const modalSubmit = (data) => {
+        let parseData = []
+        for (let i = 0; i < modalFormCount; i++) {
+            parseData.push({})
+        }
+        for (let dataKey in data) {
+            let splitData = dataKey.split("-");
+        }
     }
 
 
@@ -531,21 +539,41 @@ export default () => {
                 />
             </div>
 
+            <MultiAddModal isOpen={isModalOpen} changeOpen={() => setIsModalOpen(!isModalOpen)} />
             <Modal
-                open={isModalOpen}
+                open={false}
                 footer={modalButtons}
                 onCancel={modalClose}
                 maskClosable={false}
                 destroyOnClose={true}
             >
-                <Carousel dots={true} ref={carouselRef}
-                          afterChange={handleDotChange}
+                <Form
+                    labelCol={{
+                        span: 6,
+                    }}
+                    wrapperCol={{
+                        span: 18,
+                    }}
+                    name="advanced_modal"
+                    labelAlign={'right'}
+                    form={modalForm}
+                    onFinish={modalSubmit}
+                    preserve={false}
+                    initialValues={modalFormData}
                 >
-                    {modalFormContentPages.map((item) => {
-                        return (item)
-                    })}
-                </Carousel>
+                    <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
+
+                    <Carousel dots={false} ref={carouselRef}
+                              afterChange={handleDotChange}
+                    >
+                        {modalFormContentPages.map((item) => {
+                            console.log(isAddData);
+                            return (item)
+                        })}
+                    </Carousel>
+                </Form>
             </Modal>
         </div>
     )
 }
+export default DynamicTable

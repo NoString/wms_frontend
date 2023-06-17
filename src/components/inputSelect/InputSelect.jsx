@@ -5,6 +5,7 @@ import {reqInputSelect} from "../../api/inputSelect";
 
 export default (props) => {
     const [data, setData] = useState([]);
+    const {defaultValue} = props;
     const getData = async () => {
         let data = await reqInputSelect('/role/query');
         setData([{
@@ -17,7 +18,14 @@ export default (props) => {
         getData();
     }, []);
 
-    return (
+    return defaultValue === undefined ? (
+        <Select
+            options={data}
+            onChange={props.onChange}
+            placeholder={'role'}
+
+        />
+    ) : (
         <Select
             options={data}
             onChange={props.onChange}
