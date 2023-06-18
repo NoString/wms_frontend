@@ -20,12 +20,18 @@ export default (url, data={}, requestType='g') => {
         }else {
             promise = axios.post( url,data,{
                 headers:{
-                    token: localStorage.getItem("token")
+                    token: localStorage.getItem("token"),
+                    id: localStorage.getItem("id")
                 }
             })
         }
 
         promise.then((response) =>{
+            //403表示重新登录
+            if (response.data.code === 403){
+                localStorage.clear()
+                window.location.reload();
+            }
             resolve(response.data)
         }).catch((err) =>{
             message.error(err.message);

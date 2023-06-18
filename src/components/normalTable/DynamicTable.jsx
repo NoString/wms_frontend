@@ -23,7 +23,8 @@ import InputSelect from "../inputSelect/InputSelect";
 import {reqInputSelect} from "../../api/inputSelect";
 import {useToken} from "antd/es/theme/internal";
 import {useForm} from "antd/es/form/Form";
-import MultiAddModal from "./multiAddButton/MultiAddModal";
+import MultiAddModal from "./multiAddModal/MultiAddModal";
+import MultiEditModal from "./multiEditModal/MultiEditModal";
 
 
 const DynamicTable = () => {
@@ -34,27 +35,24 @@ const DynamicTable = () => {
         }
     };
     const {RangePicker} = DatePicker;
+
+
+
     //后端传来的data
     const [tableData, setTableData] = useState([]);
-
-    const [formInitValues, setFormInitValues] = useState({});
 
     //页面是否正在从后台加载数据
     const [pageLoading, setPageLoading] = useState(true);
 
-    //是否显示add和edit弹出层
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    //是否显示add弹出层
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-    //add和edit时的总页数
-    const [modalFormCount, setModalFormCount] = useState(1);
-
-    const [modalFormCurrent, setModalFormCurrent] = useState(1);
+    //是否显示Edit弹出层
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     //多选框选中的arr
     const [selectedArr, setSelectedArr] = useState([]);
 
-    //是否为添加data
-    const [isAddData, setIsAddData] = useState(true);
 
 
     const getTableData = async () => {
@@ -134,104 +132,6 @@ const DynamicTable = () => {
     ];
 
 
-    const [modalForm] = Form.useForm()
-    const AdvancedModalForm = (key) => {
-        return (
-            <div key={key}>
-                {}
-                <Form.Item
-                    label="Nickname"
-                    name={["nickname-" + key]}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your nickname!',
-                        },
-                    ]}
-                >
-                    <Input/>
-
-
-                </Form.Item>
-
-                <Form.Item
-                    label="Username"
-                    name={["username-" + key]}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-
-                </Form.Item>
-
-                <Form.Item
-                    label="Mobile"
-                    name={"mobile-" + key}
-                >
-                    <Input/>
-                </Form.Item>
-
-
-                <Form.Item
-                    label="Password"
-                    name={"password-" + key}
-
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}>
-                    <Input/>
-
-                </Form.Item>
-                <Form.Item
-                    name={`gender-` + key}
-                    label={'Gender'}
-                >
-                    <Select
-
-                        placeholder="gender"
-
-                        options={[
-
-                            {
-                                value: null,
-                                label: ''
-                            },
-                            {
-                                value: false,
-                                label: 'Female',
-                            }, {
-                                value: true,
-                                label: 'Male',
-                            },
-                        ]}
-                    />
-                </Form.Item>
-
-                <Form.Item
-                   name={`role_id-` + key}
-                    label={'role'}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your role!',
-                        },
-                    ]}
-                >
-                <Input/>
-                    <InputSelect />
-                </Form.Item>
-
-            </div>
-
-        )
-    }
 
     const AdvancedSearchForm = () => {
         const {token} = theme.useToken();
@@ -368,100 +268,14 @@ const DynamicTable = () => {
     };
 
     const handleAddButton = () => {
-        // setIsModalOpen(true);
-        setIsModalOpen(true);
+        setIsAddModalOpen(true);
 
 
-        // setModalFormContentPages([AdvancedModalForm(modalFormCount + '')])
+
     };
 
 
-    const handleDelete = async () => {
-        if (selectedArr.length === 0) {
-            message.error("You must choose one row!")
-            return
-        }
-        let tableData = await reqDeleteRows(selectedArr, '/users/delete')
-        let reqQueryTable1 = await reqQueryTable(formInitValues, '/users/list');
-        setTableData(reqQueryTable1.d)
-        setFormInitValues(formInitValues)
-        message.success(tableData.msg)
-    }
-
-
-    const onChange = (_, selectedRows) => {
-        setSelectedArr(selectedRows)
-    }
-
-
-    const [modalFormContentPages, setModalFormContentPages] = useState([]);
-    const carouselRef = useRef();
-    const modalClose = async () => {
-        setIsModalOpen(false);
-        setModalFormContentPages([])
-        setModalFormCount(1)
-        setModalFormCurrent(1)
-        setModalFormData({})
-    }
-    const modalMore = async () => {
-        if (modalFormCount >= 10) {
-            message.error('The pages can not be more than TEN !')
-            return;
-        }
-        let nowCurrent = modalFormCount + 1;
-        setModalFormCount(nowCurrent)
-        setModalFormCurrent(nowCurrent)
-        await setModalFormContentPages([...modalFormContentPages, AdvancedModalForm(nowCurrent + '')])
-        carouselRef.current.goTo(nowCurrent - 1);
-    }
-
-    const modalFormIndexChange = (page, pageSize) => {
-        setModalFormCurrent(page)
-        carouselRef.current.goTo(page - 1);
-    }
-
-
-    const handleDotChange = (current) => {
-        setModalFormCurrent(current + 1)
-    }
-
-    const modalButtons = [
-        <Pagination
-            key={'pagination'}
-            simple
-            defaultCurrent={1}
-            defaultPageSize={1}
-            current={modalFormCurrent}
-            total={modalFormCount}
-            size={"small"}
-            style={{paddingBottom: "20px"}}
-            hideOnSinglePage={true}
-            onChange={modalFormIndexChange}
-        />,
-        <Button key="more"
-                size={"middle"}
-                onClick={modalMore}
-                type={"primary"}
-                style={{backgroundColor: 'lightseagreen'}}
-        >
-            More
-        </Button>,
-        <Button key="save"
-                size={"middle"}
-                type={"primary"}
-                onClick={() => {
-                    modalForm.submit()
-                }}
-
-        >
-
-            Save
-        </Button>,
-    ]
-    const newFormData = {};
-    const [modalFormData, setModalFormData] = useState({});
-
-    const handleEdit = async () => {
+    const handleEditButton = async () => {
         if (selectedArr.length <= 0) {
             message.error("You must choose one row!")
             return;
@@ -470,31 +284,33 @@ const DynamicTable = () => {
             message.error("The choice of maximum is 10 rows.")
             return;
         }
-        let pages = []
+        const newFormData = {};
+
         selectedArr.map((data, index) => {
             for (let dataKey in data) {
                 newFormData[dataKey + "-" + index] = data[dataKey]
             }
-            pages.push(AdvancedModalForm(index + ''))
         })
-        setModalFormData(newFormData)
-        setIsModalOpen(true);
-        setModalFormContentPages([...pages])
-        setModalFormCount(selectedArr.length)
-        setModalFormCurrent(1)
 
+        setIsEditModalOpen(true)
 
     }
-    const modalSubmit = (data) => {
-        let parseData = []
-        for (let i = 0; i < modalFormCount; i++) {
-            parseData.push({})
+
+
+    const handleDelete = async () => {
+        if (selectedArr.length === 0) {
+            message.error("You must choose one row!")
+            return
         }
-        for (let dataKey in data) {
-            let splitData = dataKey.split("-");
-        }
+        let tableData = await reqDeleteRows(selectedArr, '/users/delete')
+        message.success(tableData.msg)
     }
 
+
+    const onChange = (_, selectedRows) => {
+
+        setSelectedArr(selectedRows)
+    }
 
     return (
         <div className={'normalTable'}>
@@ -504,7 +320,7 @@ const DynamicTable = () => {
                     <div className="operation-normal">
                         <Button type="primary" size={'middle'} onClick={handleAddButton}>Add</Button>
                         <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
-                                onClick={handleEdit}>Edit</Button>
+                                onClick={handleEditButton}>Edit</Button>
                         <Popconfirm
                             title="Delete rows"
                             description="Are you sure to delete the rows?"
@@ -539,40 +355,16 @@ const DynamicTable = () => {
                 />
             </div>
 
-            <MultiAddModal isOpen={isModalOpen} changeOpen={() => setIsModalOpen(!isModalOpen)} />
-            <Modal
-                open={false}
-                footer={modalButtons}
-                onCancel={modalClose}
-                maskClosable={false}
-                destroyOnClose={true}
-            >
-                <Form
-                    labelCol={{
-                        span: 6,
-                    }}
-                    wrapperCol={{
-                        span: 18,
-                    }}
-                    name="advanced_modal"
-                    labelAlign={'right'}
-                    form={modalForm}
-                    onFinish={modalSubmit}
-                    preserve={false}
-                    initialValues={modalFormData}
-                >
-                    <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
+            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)} />
 
-                    <Carousel dots={false} ref={carouselRef}
-                              afterChange={handleDotChange}
-                    >
-                        {modalFormContentPages.map((item) => {
-                            console.log(isAddData);
-                            return (item)
-                        })}
-                    </Carousel>
-                </Form>
-            </Modal>
+
+            {
+                // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数
+                isEditModalOpen === false ? (<div></div>) : (
+                    <MultiEditModal isOpen={isEditModalOpen} changeOpen = {() => setIsEditModalOpen(!isEditModalOpen)} datas={selectedArr} />
+                )
+            }
+
         </div>
     )
 }

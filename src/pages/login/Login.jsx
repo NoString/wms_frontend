@@ -30,9 +30,11 @@ export default () => {
             message.error(res.msg)
             return
         }
+
         localStorage.setItem("username",res.d.username)
         localStorage.setItem("token",res.d.token)
         localStorage.setItem("nickname",res.d.nickname)
+        localStorage.setItem("id",res.d.id)
         message.success("welcome, " + res.d.nickname +".")
         navigate('/dashboard')
     }

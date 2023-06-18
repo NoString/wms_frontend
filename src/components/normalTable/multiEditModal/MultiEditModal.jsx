@@ -1,16 +1,22 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, Carousel, Divider, Form, Input, message, Modal, Pagination, Select} from "antd";
 import InputSelect from "../../inputSelect/InputSelect";
 import {reqAddRows} from "../../../api/table";
+import useForceUpdate from "antd/es/_util/hooks/useForceUpdate";
 
 export default (props) => {
-    const {isOpen,changeOpen} = props
-
+    let parseData = {};
+    const {isOpen,changeOpen,datas} = props
+    let count = datas.length
+    datas.map((data,index) =>{
+        for (let dataKey in data) {
+            parseData[dataKey + "-" + index] = data[dataKey]
+        }
+    })
     const [modalFormCurrent, setModalFormCurrent] = useState(1);
-    const [modalFormCount, setModalFormCount] = useState(1);
+
     const carouselRef = useRef();
     const [modalForm] = Form.useForm()
-
 
     const AdvancedModalForm = (key) => {
         return (
@@ -113,7 +119,6 @@ export default (props) => {
         )
     }
 
-    const [modalFormContentPages, setModalFormContentPages] = useState([AdvancedModalForm( '0')]);
 
 
 
@@ -121,30 +126,17 @@ export default (props) => {
         setModalFormCurrent(page)
         carouselRef.current.goTo(page - 1);
     }
-    const modalMore = async () => {
-        if (modalFormCount >= 10) {
-            message.error('The pages can not be more than TEN !')
-            return;
-        }
-        let nowCurrent = modalFormCount + 1;
 
-        await setModalFormContentPages([...modalFormContentPages, AdvancedModalForm(modalFormCount + '')])
-        setModalFormCount(nowCurrent)
-        setModalFormCurrent(nowCurrent)
-        carouselRef.current.goTo(nowCurrent - 1);
-    }
 
     const modalClose = () => {
-        setModalFormContentPages([AdvancedModalForm( '0')])
-        setModalFormCount(1)
-        setModalFormCurrent(1)
+        parseData = {}
 
         changeOpen()
     }
 
     const modalSubmit = async (data) => {
         let parseData = []
-        for (let i = 1; i <= modalFormCount; i++) {
+        for (let i = 1; i <= count; i++) {
             parseData.push({})
         }
         for (let dataKey in data) {
@@ -159,14 +151,12 @@ export default (props) => {
             message.success(result.msg)
 
         }else {
-            message.error("Failed request")
+            message.error(result.msg)
         }
         changeOpen()
     }
 
-    const handleDotChange = (current) => {
-        setModalFormCurrent(current + 1)
-    }
+
     const modalButtons = [
         <Pagination
             key={'pagination'}
@@ -174,29 +164,18 @@ export default (props) => {
             defaultCurrent={1}
             defaultPageSize={1}
             current={modalFormCurrent}
-            total={modalFormCount}
+            total={count}
             size={"small"}
             style={{paddingBottom: "20px"}}
             hideOnSinglePage={true}
             onChange={modalFormIndexChange}
         />,
-        <Button key="more"
-                size={"middle"}
-                onClick={modalMore}
-                type={"primary"}
-                style={{backgroundColor: 'lightseagreen'}}
-        >
-            More
-        </Button>,
         <Button key="save"
                 size={"middle"}
                 type={"primary"}
                 onClick={() => {
                     modalForm.submit()
-                }}
-
-        >
-
+                }}>
             Save
         </Button>,
     ]
@@ -221,16 +200,17 @@ export default (props) => {
                 form={modalForm}
                 onFinish={modalSubmit}
                 preserve={false}
+                initialValues={parseData}
             >
                 <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
 
-                <Carousel dots={true} ref={carouselRef}
-                          afterChange={handleDotChange}
-                >
-                    {modalFormContentPages.map((item) => {
+                <Carousel dots={false} ref={carouselRef}>
+                    {
+                        datas.map((_,index) =>{
+                            return AdvancedModalForm(index)
+                        })
+                    }
 
-                        return (item)
-                    })}
                 </Carousel>
             </Form>
         </Modal>
