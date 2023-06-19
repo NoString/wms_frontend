@@ -27,7 +27,9 @@ import MultiAddModal from "./multiAddModal/MultiAddModal";
 import MultiEditModal from "./multiEditModal/MultiEditModal";
 
 
-const DynamicTable = () => {
+const DynamicTable = (props) => {
+
+    const {searchConfig} = props.config
 
     const ExportJsonExcel = require("js-export-excel");
     let pathName = window.location.pathname.split('/')[1]
@@ -39,15 +41,13 @@ const DynamicTable = () => {
             this.splice(index, 1);
         }
     };
-    const {RangePicker} = DatePicker;
-
 
 
     //后端传来的data
     const [tableData, setTableData] = useState([]);
 
     //页面是否正在从后台加载数据
-    const [pageLoading, setPageLoading] = useState(true);
+    const [loadingTableData, setLoadingTableData] = useState(true);
 
     //是否显示add弹出层
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -64,15 +64,16 @@ const DynamicTable = () => {
 
     const getTableData = async () => {
         let respTableData = await reqQueryTable(null, '/users/list');
-        setPageLoading(false)
+        setLoadingTableData(false)
         setTableData(respTableData.d)
     }
 
     const reloadTable = async () => {
+        setLoadingTableData(true)
         let result = await reqQueryTable({}, '/users/list');
         setSelectedKeys([])
         setTableData(result.d)
-
+        setLoadingTableData(false)
     }
 
 
@@ -146,7 +147,6 @@ const DynamicTable = () => {
     ];
 
 
-
     const AdvancedSearchForm = () => {
         const {token} = theme.useToken();
         const [form] = Form.useForm();
@@ -159,70 +159,50 @@ const DynamicTable = () => {
             paddingRight: 24,
         };
         const getFields = () => {
+            console.log(searchConfig);
             const children = [];
-            children.push(
-                <Col span={6} key={'1'}>
-                    <Form.Item
-                        name={`nickname`}
-                    >
-                        <Input placeholder="Nickname"/>
-                    </Form.Item>
-                </Col>,
-                <Col span={6} key={'2'}>
-                    <Form.Item
-                        name={`username`}
-                    >
-                        <Input placeholder="Username"/>
-                    </Form.Item>
-                </Col>,
-                <Col span={6} key={'3'}>
-                    <Form.Item
-                        name={`gender`}
-
-                    >
-                        <Select
-                            placeholder="gender"
-                            options={[
+            searchConfig.searchField.map((item, index) => {
+                let child;
+                if (item.notInput === true) {
+                    child = (
+                        <Col span={6} key={index + ''}>
+                            <Form.Item
+                                name={`${item.name}`}
+                            >
                                 {
-                                    value: null,
-                                    label: null
-                                },
-                                {
-                                    value: false,
-                                    label: 'Female',
-                                }, {
-                                    value: true,
-                                    label: 'Male',
-                                },
+                                    item.code
+                                }
+                            </Form.Item>
+                        </Col>
+                    )
 
-                            ]}
-                        />
-                    </Form.Item>
-                </Col>,
-                <Col span={6} key={'4'}>
-                    <Form.Item
-                        name={`last_login`}>
-                        <RangePicker/>
-                    </Form.Item>
-                </Col>,
-                <Col span={6} key={'5'}>
-                    <Form.Item
-                        name={`all`}>
-                        <Input placeholder="all"/>
-                    </Form.Item>
-                </Col>,
-                <Col span={6} key={'6'}>
-                    <Form.Item
-                        name={`role_id`}>
-                        <InputSelect/>
-                    </Form.Item>
-                </Col>,
-            );
+                }else {
+                    child = (
+                            <Col span={6} key={index + ''}>
+                                <Form.Item
+                                    name={`${item.name}`}
+                                >
+                                    <Input placeholder={`${item.placeholder}`}/>
+                                </Form.Item>
+                            </Col>
+                        )
+                }
+                children.push(child)
+            })
+            if (searchConfig.all !== undefined && searchConfig.all !== false) {
+                children.push(
+                        <Col span={6} key={'all'}>
+                            <Form.Item
+                                name={`all`}>
+                                <Input placeholder="all"/>
+                            </Form.Item>
+                        </Col>
+                )
+            }
             return children;
         };
         const handleSearch = async (values) => {
-
-
+            setLoadingTableData(true)
             //模糊搜索,把所有前台展示columns发送回后台做sql拼接
             if (values.all !== undefined) {
                 let searchColumns = [];
@@ -244,6 +224,7 @@ const DynamicTable = () => {
 
             let reqQueryTable1 = await reqQueryTable(values, '/users/list');
             setTableData(reqQueryTable1.d)
+            setLoadingTableData(false)
         };
         return (
             <Form form={form} name="advanced_search" style={formStyle} onFinish={handleSearch}
@@ -319,31 +300,31 @@ const DynamicTable = () => {
     }
 
 
-    const tableSelectChange = (key,selectedRows) => {
+    const tableSelectChange = (key, selectedRows) => {
         setSelectedKeys(key)
         setSelectedArr(selectedRows)
     }
 
     const exportExcel = () => {
-      if (selectedArr.length <= 0 ){
-          message.error("Please, choose at least one row")
-          return
-      }
+        if (selectedArr.length <= 0) {
+            message.error("Please, choose at least one row")
+            return
+        }
         let excelColumns = []
         let sheetData = []
         for (let i = 0; i < columns.length; i++) {
             excelColumns.push(columns[i].dataIndex)
         }
 
-        selectedArr.map((obj) =>{
+        selectedArr.map((obj) => {
             let excelObj = {}
-            excelColumns.map((key) =>{
+            excelColumns.map((key) => {
 
                 excelObj[key] = obj[key]
             })
             sheetData.push(excelObj)
         })
-        let option  = {};
+        let option = {};
         // 文件名
         option.fileName = pathName;
         // excel的数据
@@ -353,7 +334,7 @@ const DynamicTable = () => {
                 sheetData: sheetData,
                 sheetFilter: excelColumns,
                 sheetHeader: excelColumns,
-                columnWidths: [10,10,10,10]
+                columnWidths: [10, 10, 10, 10]
             }
         ]
         // 创建实例
@@ -393,7 +374,7 @@ const DynamicTable = () => {
                     columns={columns}
                     dataSource={tableData}
                     className={'main-table'}
-                    loading={pageLoading}
+                    loading={loadingTableData}
                     size={"small"}
 
                     bordered
@@ -403,19 +384,21 @@ const DynamicTable = () => {
                     }}
                     rowSelection={{
                         fixed: true,
-                        onChange : tableSelectChange,
-                        selectedRowKeys : selectedKeys,
+                        onChange: tableSelectChange,
+                        selectedRowKeys: selectedKeys,
                     }}
                 />
             </div>
 
-            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)} reloadTable={reloadTable}/>
+            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
+                           reloadTable={reloadTable}/>
 
 
             {
                 // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数
                 isEditModalOpen === false ? (<div></div>) : (
-                    <MultiEditModal isOpen={isEditModalOpen} changeOpen = {() => setIsEditModalOpen(!isEditModalOpen)} datas={selectedArr} reloadTable={reloadTable} />
+                    <MultiEditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
+                                    datas={selectedArr} reloadTable={reloadTable}/>
                 )
             }
 

@@ -7,9 +7,9 @@ export default (props) => {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {value} = props;
+    const {value, url} = props;
     const getData = async () => {
-        let data = await reqInputSelect('/role/query');
+        let data = await reqInputSelect(url);
         setData([{
             label: '',
             value: ''
