@@ -1,36 +1,33 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import './inputSelect.css'
 import {Select} from "antd";
 import {reqInputSelect} from "../../api/inputSelect";
 
 export default (props) => {
+
     const [data, setData] = useState([]);
-    const {defaultValue} = props;
+    const [isLoading, setIsLoading] = useState(true);
+    const {value} = props;
     const getData = async () => {
         let data = await reqInputSelect('/role/query');
         setData([{
             label: '',
             value: ''
         }, ...data.d])
-        return data;
+        console.log(data);
+        setIsLoading(false)
     }
     useEffect(() => {
         getData();
     }, []);
 
-    return defaultValue === undefined ? (
+    return (
         <Select
             options={data}
             onChange={props.onChange}
             placeholder={'role'}
-
-        />
-    ) : (
-        <Select
-            options={data}
-            onChange={props.onChange}
-            placeholder={'role'}
-            defaultValue={props.defaultValue}
+            defaultValue={value}
+            loading={isLoading}
         />
     )
 }

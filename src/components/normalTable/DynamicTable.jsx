@@ -53,12 +53,21 @@ const DynamicTable = () => {
     //多选框选中的arr
     const [selectedArr, setSelectedArr] = useState([]);
 
+    //多选框选中的key
+    const [selectedKeys, setSelectedKeys] = useState([]);
 
 
     const getTableData = async () => {
         let respTableData = await reqQueryTable(null, '/users/list');
         setPageLoading(false)
         setTableData(respTableData.d)
+    }
+
+    const reloadTable = async () => {
+        let result = await reqQueryTable({}, '/users/list');
+        setSelectedKeys([])
+        setTableData(result.d)
+
     }
 
 
@@ -269,9 +278,6 @@ const DynamicTable = () => {
 
     const handleAddButton = () => {
         setIsAddModalOpen(true);
-
-
-
     };
 
 
@@ -303,12 +309,13 @@ const DynamicTable = () => {
             return
         }
         let tableData = await reqDeleteRows(selectedArr, '/users/delete')
+        reloadTable()
         message.success(tableData.msg)
     }
 
 
-    const onChange = (_, selectedRows) => {
-
+    const tableSelectChange = (key,selectedRows) => {
+        setSelectedKeys(key)
         setSelectedArr(selectedRows)
     }
 
@@ -350,18 +357,19 @@ const DynamicTable = () => {
                     }}
                     rowSelection={{
                         fixed: true,
-                        onChange
+                        onChange : tableSelectChange,
+                        selectedRowKeys : selectedKeys,
                     }}
                 />
             </div>
 
-            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)} />
+            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)} reloadTable={reloadTable}/>
 
 
             {
                 // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数
                 isEditModalOpen === false ? (<div></div>) : (
-                    <MultiEditModal isOpen={isEditModalOpen} changeOpen = {() => setIsEditModalOpen(!isEditModalOpen)} datas={selectedArr} />
+                    <MultiEditModal isOpen={isEditModalOpen} changeOpen = {() => setIsEditModalOpen(!isEditModalOpen)} datas={selectedArr} reloadTable={reloadTable} />
                 )
             }
 

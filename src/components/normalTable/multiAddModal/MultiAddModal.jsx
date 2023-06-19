@@ -4,7 +4,7 @@ import InputSelect from "../../inputSelect/InputSelect";
 import {reqAddRows} from "../../../api/table";
 
 export default (props) => {
-    const {isOpen,changeOpen} = props
+    const {isOpen,changeOpen,reloadTable} = props
 
     const [modalFormCurrent, setModalFormCurrent] = useState(1);
     const [modalFormCount, setModalFormCount] = useState(1);
@@ -161,6 +161,7 @@ export default (props) => {
         }else {
             message.error(result.msg)
         }
+        reloadTable()
         changeOpen()
     }
 
@@ -224,7 +225,7 @@ export default (props) => {
             >
                 <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
 
-                <Carousel dots={true} ref={carouselRef}
+                <Carousel dots={false} ref={carouselRef}
                           afterChange={handleDotChange}
                 >
                     {modalFormContentPages.map((item) => {

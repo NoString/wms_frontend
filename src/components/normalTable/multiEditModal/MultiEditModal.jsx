@@ -6,7 +6,7 @@ import useForceUpdate from "antd/es/_util/hooks/useForceUpdate";
 
 export default (props) => {
     let parseData = {};
-    const {isOpen,changeOpen,datas} = props
+    const {isOpen,changeOpen,datas,reloadTable} = props
     let count = datas.length
     datas.map((data,index) =>{
         for (let dataKey in data) {
@@ -21,6 +21,16 @@ export default (props) => {
     const AdvancedModalForm = (key) => {
         return (
             <div key={key}>
+
+                {/*确保form提交时包含ID字段*/}
+                <Form.Item
+                    label="id"
+                    name={"id-" + key}
+                    style={{display:"none"}}
+                >
+                    <Input/>
+                </Form.Item>
+
 
                 <Form.Item
                     label="Nickname"
@@ -146,13 +156,14 @@ export default (props) => {
             parseData[index][splitKey] = data[dataKey]
         }
 
-        let result = await reqAddRows(parseData,"/users/add")
+        let result = await reqAddRows(parseData,"/users/edit")
         if (result.code === 200) {
             message.success(result.msg)
 
         }else {
             message.error(result.msg)
         }
+        reloadTable()
         changeOpen()
     }
 
