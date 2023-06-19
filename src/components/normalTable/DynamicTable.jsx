@@ -28,6 +28,11 @@ import MultiEditModal from "./multiEditModal/MultiEditModal";
 
 
 const DynamicTable = () => {
+
+    const ExportJsonExcel = require("js-export-excel");
+    let pathName = window.location.pathname.split('/')[1]
+
+
     Array.prototype.remove = function (val) {
         var index = this.indexOf(val);
         if (index > -1) {
@@ -106,10 +111,10 @@ const DynamicTable = () => {
         },
         {
             title: 'Gender',
-            dataIndex: 'gender',
+            dataIndex: 'gender$',
             key: 'gender',
             align: 'center',
-            render: text => text === undefined ? '' : text === true ? 'male' : 'female'
+
         },
         {
             title: 'Last Login',
@@ -319,6 +324,48 @@ const DynamicTable = () => {
         setSelectedArr(selectedRows)
     }
 
+    const exportExcel = () => {
+      if (selectedArr.length <= 0 ){
+          message.error("Please, choose at least one row")
+          return
+      }
+        let excelColumns = []
+        let sheetData = []
+        for (let i = 0; i < columns.length; i++) {
+            excelColumns.push(columns[i].dataIndex)
+        }
+
+        selectedArr.map((obj) =>{
+            let excelObj = {}
+            excelColumns.map((key) =>{
+
+                excelObj[key] = obj[key]
+            })
+            sheetData.push(excelObj)
+        })
+        let option  = {};
+        // 文件名
+        option.fileName = pathName;
+        // excel的数据
+        option.datas = [
+            {
+                sheetName: pathName,
+                sheetData: sheetData,
+                sheetFilter: excelColumns,
+                sheetHeader: excelColumns,
+                columnWidths: [10,10,10,10]
+            }
+        ]
+        // 创建实例
+        let toExcel = new ExportJsonExcel(option);
+        // 保存下载excel
+        toExcel.saveExcel();
+    }
+
+    const exportPrint = () => {
+        window.print()
+    }
+
     return (
         <div className={'normalTable'}>
             <AdvancedSearchForm/>
@@ -339,8 +386,7 @@ const DynamicTable = () => {
                         </Popconfirm>
                     </div>
                     <div className="operation-output" span={12}>
-                        <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}/>
-                        <Button size={"middle"} shape="circle" icon={<PrinterOutlined/>}/>
+                        <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>} onClick={exportExcel}/>
                     </div>
                 </div>
                 <Table

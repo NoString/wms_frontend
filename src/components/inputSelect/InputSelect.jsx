@@ -14,7 +14,6 @@ export default (props) => {
             label: '',
             value: ''
         }, ...data.d])
-        console.log(data);
         setIsLoading(false)
     }
     useEffect(() => {
