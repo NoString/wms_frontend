@@ -141,8 +141,10 @@ const DynamicTable = (props) => {
             fixed: 'right',
             render: (value) => {
                 return (
+
                     <Space size="middle">
-                        <a onClick={() => handleEdit(value)}>Edit</a>
+                        <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
+                                onClick={() => handleEdit(value)}>Edit</Button>
                     </Space>
                 )
             },
@@ -350,9 +352,6 @@ const DynamicTable = (props) => {
         toExcel.saveExcel();
     }
 
-    const exportPrint = () => {
-        window.print()
-    }
 
     return (
         <div className={'normalTable'}>
@@ -360,21 +359,37 @@ const DynamicTable = (props) => {
             <div className={'table-part'}>
                 <div className={'operation'}>
                     <div className="operation-normal">
-                        <Button type="primary" size={'middle'} onClick={handleAddButton}>Add</Button>
-                        <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
-                                onClick={handleEditButton}>Edit</Button>
-                        <Popconfirm
-                            title="Delete rows"
-                            description="Are you sure to delete the rows?"
-                            onConfirm={handleDelete}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button danger type="primary" size={'middle'}>Delete</Button>
-                        </Popconfirm>
+                        {
+                            operationConfig.showAdd=== true ? (
+                                <Button type="primary" size={'middle'} onClick={handleAddButton}>Add</Button>
+                            ):(<div></div>)
+                        }
+                        {
+                            operationConfig.showDelete === true ? (
+                                <Popconfirm
+                                    title="Delete rows"
+                                    description="Are you sure to delete the rows?"
+                                    onConfirm={handleDelete}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button danger type="primary" size={'middle'}>Delete</Button>
+                                </Popconfirm>
+                            ): (
+                                <div></div>
+                            )
+                        }
+
                     </div>
                     <div className="operation-output" span={12}>
-                        <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>} onClick={exportExcel}/>
+                        {
+                            operationConfig.showExport === true ? (
+                                <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>} onClick={exportExcel}/>
+
+                            ):(
+                                <div></div>
+                            )
+                        }
                     </div>
                 </div>
                 <Table
@@ -404,14 +419,6 @@ const DynamicTable = (props) => {
             <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
                        reloadTable={reloadTable} fields={operationConfig.field} data={editData}/>)
             }
-
-            {/*{*/}
-            {/*    // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数*/}
-            {/*    isEditModalOpen === false ? (<div></div>) : (*/}
-            {/*        <MultiEditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}*/}
-            {/*                        datas={selectedArr} reloadTable={reloadTable}/>*/}
-            {/*    )*/}
-            {/*}*/}
 
         </div>
     )

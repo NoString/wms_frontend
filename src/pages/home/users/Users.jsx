@@ -169,9 +169,7 @@ export default () => {
                 }
 
             ],
-            addOperation: {
-                show: true,
-            },
+            showAdd: true,
             editOperation: {
                 show: true
             },
