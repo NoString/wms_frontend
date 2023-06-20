@@ -4,109 +4,133 @@ import InputSelect from "../../inputSelect/InputSelect";
 import {reqAddRows} from "../../../api/table";
 
 export default (props) => {
-    const {isOpen,changeOpen,reloadTable} = props
+    const {isOpen,changeOpen,reloadTable,fields} = props
 
     const [modalFormCurrent, setModalFormCurrent] = useState(1);
     const [modalFormCount, setModalFormCount] = useState(1);
     const carouselRef = useRef();
     const [modalForm] = Form.useForm()
 
+    console.log(fields);
 
     const AdvancedModalForm = (key) => {
         return (
             <div key={key}>
+                {
+                    fields.map((item,index) =>{
+                        return item.notInput === true ? (
+                            <Form.Item
+                                label={item.label}
+                                name={item.name + "-" + key}
+                                key={index}
+                                rules={item.rules}
+                            >
+                                {item.code}
+                            </Form.Item>
+                        ) : (
+                            <Form.Item
+                                label={item.label}
+                                name={item.name + "-" + key}
+                                key={index}
+                                rules={item.rules}
+                            >
+                                <Input/>
+                            </Form.Item>
+                        )
+                    })
+                }
 
-                <Form.Item
-                    label="Nickname"
-                    name={"nickname-" + key}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your nickname!',
-                        },
-                    ]}
-                >
-                    <Input/>
-
-
-                </Form.Item>
-
-                <Form.Item
-                    label="Username"
-                    name={"username-" + key}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input/>
-
-                </Form.Item>
-
-                <Form.Item
-                    label="Mobile"
-                    name={"mobile-" + key}
-                >
-                    <Input/>
-                </Form.Item>
-
-
-                <Form.Item
-                    label="Password"
-                    name={"password-" + key}
-
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}>
-                    <Input/>
-
-                </Form.Item>
+            {/*    <Form.Item*/}
+            {/*        label="Nickname"*/}
+            {/*        name={"nickname-" + key}*/}
+            {/*        rules={[*/}
+            {/*            {*/}
+            {/*                required: true,*/}
+            {/*                message: 'Please input your nickname!',*/}
+            {/*            },*/}
+            {/*        ]}*/}
+            {/*    >*/}
+            {/*        <Input/>*/}
 
 
-                <Form.Item
-                    name={`gender-` + key}
-                    label={'Gender'}
-                >
-                    <Select
+            {/*    </Form.Item>*/}
 
-                        placeholder="gender"
+            {/*    <Form.Item*/}
+            {/*        label="Username"*/}
+            {/*        name={"username-" + key}*/}
+            {/*        rules={[*/}
+            {/*            {*/}
+            {/*                required: true,*/}
+            {/*                message: 'Please input your username!',*/}
+            {/*            },*/}
+            {/*        ]}*/}
+            {/*    >*/}
+            {/*        <Input/>*/}
 
-                        options={[
+            {/*    </Form.Item>*/}
 
-                            {
-                                value: null,
-                                label: ''
-                            },
-                            {
-                                value: false,
-                                label: 'Female',
-                            }, {
-                                value: true,
-                                label: 'Male',
-                            },
-                        ]}
-                    />
-                </Form.Item>
+            {/*    <Form.Item*/}
+            {/*        label="Mobile"*/}
+            {/*        name={"mobile-" + key}*/}
+            {/*    >*/}
+            {/*        <Input/>*/}
+            {/*    </Form.Item>*/}
 
 
+            {/*    <Form.Item*/}
+            {/*        label="Password"*/}
+            {/*        name={"password-" + key}*/}
 
-                <Form.Item
-                    name={"roleId-" + key}
-                    label={'role'}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your role!',
-                        },
-                    ]}
-                >
-                    <InputSelect/>
-                </Form.Item>
+            {/*        rules={[*/}
+            {/*            {*/}
+            {/*                required: true,*/}
+            {/*                message: 'Please input your password!',*/}
+            {/*            },*/}
+            {/*        ]}>*/}
+            {/*        <Input/>*/}
+
+            {/*    </Form.Item>*/}
+
+
+            {/*    <Form.Item*/}
+            {/*        name={`gender-` + key}*/}
+            {/*        label={'Gender'}*/}
+            {/*    >*/}
+            {/*        <Select*/}
+
+            {/*            placeholder="gender"*/}
+
+            {/*            options={[*/}
+
+            {/*                {*/}
+            {/*                    value: null,*/}
+            {/*                    label: ''*/}
+            {/*                },*/}
+            {/*                {*/}
+            {/*                    value: false,*/}
+            {/*                    label: 'Female',*/}
+            {/*                }, {*/}
+            {/*                    value: true,*/}
+            {/*                    label: 'Male',*/}
+            {/*                },*/}
+            {/*            ]}*/}
+            {/*        />*/}
+            {/*    </Form.Item>*/}
+
+
+
+            {/*    <Form.Item*/}
+            {/*        name={"roleId-" + key}*/}
+            {/*        label={'role'}*/}
+            {/*        rules={[*/}
+            {/*            {*/}
+            {/*                required: true,*/}
+            {/*                message: 'Please input your role!',*/}
+            {/*            },*/}
+            {/*        ]}*/}
+            {/*    >*/}
+            {/*        <InputSelect/>*/}
+            {/*    </Form.Item>*/}
 
             </div>
 

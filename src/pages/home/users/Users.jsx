@@ -3,7 +3,8 @@ import './users.css'
 import DynamicTable from "../../../components/normalTable/DynamicTable";
 import {DatePicker, Select} from "antd";
 import InputSelect from "../../../components/inputSelect/InputSelect";
-export default () =>{
+
+export default () => {
 
     const {RangePicker} = DatePicker;
 
@@ -18,7 +19,11 @@ export default () =>{
                     //name是传递给后台的key
                     name: "nickname",
                     // 输入框展示的内容
-                    placeholder: "Nickname"
+                    placeholder: "Nickname",
+                    rule: [{
+                        required: true,
+                        message: "Please, choose a role"
+                    }],
                 },
                 {
                     name: "username",
@@ -57,14 +62,14 @@ export default () =>{
                     )
                 },
                 {
-                    name:"last_login",
+                    name: "last_login",
                     notInput: true,
                     code: (
                         <RangePicker/>
                     )
                 },
                 {
-                    name:"role_id",
+                    name: "role_id",
                     notInput: true,
                     code: (
                         <InputSelect url={"/role/query"}/>
@@ -73,10 +78,105 @@ export default () =>{
 
             ]
         },
+        operationConfig: {
+            field: [
+                {
+                    label: "Nickname",
+                    name: "nickname",
+                    rules: [{
+                        required: true,
+                        message: 'Please input your nickname!',
+                        type:"string",
+                        min:3
+                    }]
+                },
+                {
+                    label: "Username",
+                    name: "username",
+                    rules: [{
+                        required: true,
+                        message: 'Please input your username!',
+                        type:"string",
+                        min:6
+                    }]
+                },{
+                    label: "Email",
+                    name: "email",
+                    rules: [{
+                        required: true,
+                        message: 'Please input your email!',
+                        type:"email"
+                    }]
+                },
+
+                {
+                    label: "Mobile",
+                    name: "mobile",
+                }, {
+                    label: "Gender",
+                    name: "gender",
+                    notInput:true,
+                    code:(
+                        <Select
+
+                            placeholder="gender"
+
+                            options={[
+
+                                {
+                                    value: null,
+                                    label: ''
+                                },
+                                {
+                                    value: false,
+                                    label: 'Female',
+                                }, {
+                                    value: true,
+                                    label: 'Male',
+                                },
+                            ]}
+                        />
+                    )
+                },
+                {
+                    label: "Role",
+                    name: "roleId",
+                    rules:[{
+                        required: true,
+                        message: 'Please choose the role!',
+                    }],
+                    notInput: true,
+                    code: (
+                        <InputSelect url={"/role/query"}/>
+                    )
+                },
+                {
+                    label: "Status",
+                    name: "status",
+                    rules:[{
+                        required: true,
+                        message: 'Please choose the status!',
+                    }],
+                    notInput: true,
+                    code: (
+                        <InputSelect url={"users/status/query"}/>
+                    )
+                }
+
+            ],
+            addOperation: {
+                show: true,
+            },
+            editOperation: {
+                show: true
+            },
+            showDelete: true,
+            showExport: true
+        }
     }
 
-    return(
-        <div className = {'users'}>
+    return (
+        <div className={'users'}>
             <DynamicTable config={config}/>
         </div>
     )

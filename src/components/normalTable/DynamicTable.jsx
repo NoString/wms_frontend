@@ -29,7 +29,7 @@ import MultiEditModal from "./multiEditModal/MultiEditModal";
 
 const DynamicTable = (props) => {
 
-    const {searchConfig} = props.config
+    const {searchConfig, operationConfig} = props.config
 
     const ExportJsonExcel = require("js-export-excel");
     let pathName = window.location.pathname.split('/')[1]
@@ -159,7 +159,6 @@ const DynamicTable = (props) => {
             paddingRight: 24,
         };
         const getFields = () => {
-            console.log(searchConfig);
             const children = [];
             searchConfig.searchField.map((item, index) => {
                 let child;
@@ -391,7 +390,7 @@ const DynamicTable = (props) => {
             </div>
 
             <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
-                           reloadTable={reloadTable}/>
+                           reloadTable={reloadTable} fields={operationConfig.field}/>
 
 
             {

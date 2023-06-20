@@ -25,7 +25,6 @@ export default (props) => {
             options={data}
             onChange={props.onChange}
             placeholder={'role'}
-            defaultValue={value}
             loading={isLoading}
         />
     )
