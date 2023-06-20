@@ -7,7 +7,8 @@ export default (props) => {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {url, placeholder} = props;
+    const {value,url, placeholder} = props;
+    console.log(props);
     const getData = async () => {
         let data = await reqInputSelect(url);
         setData([{
@@ -26,7 +27,7 @@ export default (props) => {
             onChange={props.onChange}
             placeholder={placeholder}
             loading={isLoading}
-
+            value={value}
         />
     )
 }

@@ -5,7 +5,7 @@ import {reqEditRow, reqEditRows} from "../../../api/table";
 
 export default (props) => {
 
-    const {isOpen,changeOpen,data,reloadTable,fields} = props
+    const {isOpen, changeOpen, data, reloadTable, fields} = props
 
 
     const [modalForm] = Form.useForm()
@@ -13,6 +13,13 @@ export default (props) => {
         console.log(fields);
         return (
             <div key={key}>
+                <Form.Item
+                label={'Id'}
+                name={'id'}
+                style={{display:"none"}}
+                >
+                    <Input/>
+                </Form.Item>
                 {
 
 
@@ -25,7 +32,7 @@ export default (props) => {
                                 key={index + ''}
                             >
                                 {
-                                    item.code()
+                                    item.code
                                 }
                             </Form.Item>)
                         } else {
@@ -34,6 +41,7 @@ export default (props) => {
                                 name={item.name}
                                 rules={item.rule}
                                 key={index + ''}
+
                             >
                                 <Input/>
                             </Form.Item>)
@@ -41,15 +49,11 @@ export default (props) => {
 
                     })
                 }
+
             </div>
 
         )
     }
-
-
-
-
-
 
 
     const modalClose = () => {
@@ -59,12 +63,11 @@ export default (props) => {
     }
 
     const modalSubmit = async (data) => {
-
-        let result = await reqEditRow(data,"/users/edit")
+        let result = await reqEditRow(data, "/users/edit")
         if (result.code === 200) {
             message.success(result.msg)
 
-        }else {
+        } else {
             message.error(result.msg)
         }
         reloadTable()
