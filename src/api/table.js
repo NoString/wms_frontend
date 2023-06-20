@@ -7,3 +7,4 @@ export const reqQueryTable = (require,path) => {
 export const reqDeleteRows = (require,path) => ajax(path,require,'p')
 
 export const reqAddRows = (require,path) => ajax(path,require,'p')
+export const reqEditRow = (require,path) => ajax(path,require,'p')

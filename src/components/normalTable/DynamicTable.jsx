@@ -25,6 +25,7 @@ import {useToken} from "antd/es/theme/internal";
 import {useForm} from "antd/es/form/Form";
 import MultiAddModal from "./multiAddModal/MultiAddModal";
 import MultiEditModal from "./multiEditModal/MultiEditModal";
+import EditModal from "./editModal/EditModal";
 
 
 const DynamicTable = (props) => {
@@ -55,6 +56,8 @@ const DynamicTable = (props) => {
     //是否显示Edit弹出层
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+    //Edit的数据
+    const [editData, setEditData] = useState({});
     //多选框选中的arr
     const [selectedArr, setSelectedArr] = useState([]);
 
@@ -136,15 +139,20 @@ const DynamicTable = (props) => {
             key: 'action',
             align: 'center',
             fixed: 'right',
-            render: (_, value) => {
+            render: (value) => {
                 return (
                     <Space size="middle">
-                        <a>Modify</a>
+                        <a onClick={() => handleEdit(value)}>Edit</a>
                     </Space>
                 )
             },
         },
     ];
+
+    const handleEdit = (value) => {
+        setEditData(value)
+        setIsEditModalOpen(true)
+    }
 
 
     const AdvancedSearchForm = () => {
@@ -175,27 +183,27 @@ const DynamicTable = (props) => {
                         </Col>
                     )
 
-                }else {
+                } else {
                     child = (
-                            <Col span={6} key={index + ''}>
-                                <Form.Item
-                                    name={`${item.name}`}
-                                >
-                                    <Input placeholder={`${item.placeholder}`}/>
-                                </Form.Item>
-                            </Col>
-                        )
+                        <Col span={6} key={index + ''}>
+                            <Form.Item
+                                name={`${item.name}`}
+                            >
+                                <Input placeholder={`${item.placeholder}`}/>
+                            </Form.Item>
+                        </Col>
+                    )
                 }
                 children.push(child)
             })
             if (searchConfig.all !== undefined && searchConfig.all !== false) {
                 children.push(
-                        <Col span={6} key={'all'}>
-                            <Form.Item
-                                name={`all`}>
-                                <Input placeholder="all"/>
-                            </Form.Item>
-                        </Col>
+                    <Col span={6} key={'all'}>
+                        <Form.Item
+                            name={`all`}>
+                            <Input placeholder="all"/>
+                        </Form.Item>
+                    </Col>
                 )
             }
             return children;
@@ -391,15 +399,19 @@ const DynamicTable = (props) => {
 
             <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
                            reloadTable={reloadTable} fields={operationConfig.field}/>
-
-
             {
-                // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数
                 isEditModalOpen === false ? (<div></div>) : (
-                    <MultiEditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
-                                    datas={selectedArr} reloadTable={reloadTable}/>
-                )
+            <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
+                       reloadTable={reloadTable} fields={operationConfig.field} data={editData}/>)
             }
+
+            {/*{*/}
+            {/*    // 必须通过这种方式强制重载组件,否则组件不会重载,而Form表单的默认值只会加载第一次传来的参数*/}
+            {/*    isEditModalOpen === false ? (<div></div>) : (*/}
+            {/*        <MultiEditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}*/}
+            {/*                        datas={selectedArr} reloadTable={reloadTable}/>*/}
+            {/*    )*/}
+            {/*}*/}
 
         </div>
     )

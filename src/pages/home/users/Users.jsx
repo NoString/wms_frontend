@@ -112,32 +112,34 @@ export default () => {
                 {
                     label: "Mobile",
                     name: "mobile",
-                }, {
-                    label: "Gender",
-                    name: "gender",
-                    notInput:true,
-                    code:(
-                        <Select
-
-                            placeholder="gender"
-
-                            options={[
-
-                                {
-                                    value: null,
-                                    label: ''
-                                },
-                                {
-                                    value: false,
-                                    label: 'Female',
-                                }, {
-                                    value: true,
-                                    label: 'Male',
-                                },
-                            ]}
-                        />
-                    )
-                },
+                }
+                // , {
+                //     label: "Gender",
+                //     name: "gender",
+                //     notInput:true,
+                //     code:(
+                //         <Select
+                //
+                //             placeholder="gender"
+                //
+                //             options={[
+                //
+                //                 {
+                //                     value: null,
+                //                     label: ''
+                //                 },
+                //                 {
+                //                     value: false,
+                //                     label: 'Female',
+                //                 }, {
+                //                     value: true,
+                //                     label: 'Male',
+                //                 },
+                //             ]}
+                //         />
+                //     )
+                // }
+                ,
                 {
                     label: "Role",
                     name: "roleId",
@@ -146,22 +148,23 @@ export default () => {
                         message: 'Please choose the role!',
                     }],
                     notInput: true,
-                    code: (
-                        <InputSelect url={"/role/query"}/>
-                    )
-                },
-                {
-                    label: "Status",
-                    name: "status",
-                    rules:[{
-                        required: true,
-                        message: 'Please choose the status!',
-                    }],
-                    notInput: true,
-                    code: (
-                        <InputSelect url={"users/status/query"}/>
-                    )
+                    code: () => {
+                        return <InputSelect url={"/role/query"} placeholder={'Role'}/>
+                    }
                 }
+                // ,
+                // {
+                //     label: "Status",
+                //     name: "status",
+                //     rules:[{
+                //         required: true,
+                //         message: 'Please choose the status!',
+                //     }],
+                //     notInput: true,
+                //     code: (
+                //         <InputSelect url={"users/status/query"} placeholder={'Status'}/>
+                //     )
+                // }
 
             ],
             addOperation: {
