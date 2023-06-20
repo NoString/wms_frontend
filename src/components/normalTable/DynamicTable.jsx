@@ -30,7 +30,7 @@ import EditModal from "./editModal/EditModal";
 
 const DynamicTable = (props) => {
 
-    const {searchConfig, operationConfig} = props.config
+    const {searchConfig, operationConfig,tableFields} = props.config
 
     const ExportJsonExcel = require("js-export-excel");
     let pathName = window.location.pathname.split('/')[1]
@@ -85,13 +85,50 @@ const DynamicTable = (props) => {
 
     }, []);
 
+    const orderByLength = (pre,next,orderBy) => {
+        return pre.nickname.length - next.nickname.length
+    }
 
+
+    const getTableFields = () => {
+        let fields = []
+        tableFields.map((value,index) =>{
+            let field = {};
+            field.title = value.title
+            field.dataIndex = value.javaName
+            field.key = value.dbName
+            field.align = "center"
+            //给非Action的字段加上排序
+            if (value.title !== "Action"){
+                field.defaultSortOrder = 'descend'
+                if (value.order === "time") {
+
+                }else {
+                    field.sorter = (a,b,c) => {
+                        let date = new Date(a.updateTime)
+                        return a.nickname.length - b.nickname.length
+
+                    }
+                }
+
+            }
+            fields.push(field)
+        })
+        return fields
+    }
     const columns = [
         {
             title: 'Nickname',
             dataIndex: 'nickname',
             key: 'nickname',
-            align: 'center'
+            align: 'center',
+            defaultSortOrder: 'descend',
+            sorter: (a,b,c) => {
+                let date = new Date(a.updateTime)
+                console.log(date);
+                return a.nickname.length - b.nickname.length
+
+            }
         },
         {
             title: 'Username',
@@ -149,6 +186,7 @@ const DynamicTable = (props) => {
                 )
             },
         },
+
     ];
 
     const handleEdit = (value) => {
@@ -398,17 +436,16 @@ const DynamicTable = (props) => {
                     className={'main-table'}
                     loading={loadingTableData}
                     size={"small"}
-
-                    bordered
+                    bordered={true}
                     pagination={{
                         hideOnSinglePage: true,
                         size: "default"
                     }}
-                    rowSelection={{
+                    rowSelection={operationConfig.showDelete === true ? {
                         fixed: true,
                         onChange: tableSelectChange,
                         selectedRowKeys: selectedKeys,
-                    }}
+                    } : false}
                 />
             </div>
 

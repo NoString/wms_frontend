@@ -1,7 +1,7 @@
 import React from "react";
 import './users.css'
 import DynamicTable from "../../../components/normalTable/DynamicTable";
-import {DatePicker, Select} from "antd";
+import {Button, DatePicker, Select, Space} from "antd";
 import InputSelect from "../../../components/inputSelect/InputSelect";
 
 export default () => {
@@ -170,12 +170,82 @@ export default () => {
 
             ],
             showAdd: true,
-            editOperation: {
-                show: true
-            },
+            showEdit: true,
             showDelete: true,
             showExport: true
-        }
+        },
+        tableFields : [
+            {
+                title: 'Nickname',
+                dataIndex: 'nickname',
+                key: 'nickname',
+                align: 'center',
+                defaultSortOrder: 'descend',
+                sorter: (a,b,c) => {
+                    let date = new Date(a.updateTime)
+                    console.log(date);
+                    return a.nickname.length - b.nickname.length
+
+                }
+            },
+            {
+                title: 'Username',
+                dataIndex: 'username',
+                key: 'username',
+                align: 'center',
+
+            },
+            {
+                title: 'Mobile',
+                dataIndex: 'mobile',
+                align: 'center',
+                key: 'mobile',
+            },
+            {
+                title: 'Password',
+                dataIndex: 'password',
+                key: 'password',
+                align: 'center',
+
+            },
+            {
+                title: 'Gender',
+                dataIndex: 'gender$',
+                key: 'gender',
+                align: 'center',
+
+            },
+            {
+                title: 'Last Login',
+                dataIndex: 'lastLogin$',
+                key: 'last_login',
+                align: 'center',
+
+            },
+            {
+                title: 'Role',
+                dataIndex: 'role',
+                key: 'role',
+                align: 'center',
+
+            },
+            {
+                title: 'Action',
+                key: 'action',
+                align: 'center',
+                fixed: 'right',
+                render: (value) => {
+                    return (
+
+                        <Space size="middle">
+                            <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
+                                    onClick={() => handleEdit(value)}>Edit</Button>
+                        </Space>
+                    )
+                },
+            }
+
+        ]
     }
 
     return (
