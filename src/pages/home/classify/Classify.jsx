@@ -65,21 +65,27 @@ export default () => {
                 title: 'Create time',
                 javaName: 'createTime$',
                 dbName: 'create_time',
+                sort: "date"
             },
             {
                 title: 'Create by',
                 javaName: 'createBy$',
                 dbName: 'create_by',
+                sort: "str"
+
             },
             {
                 title: 'Update time',
                 javaName: 'updateTime$',
                 dbName: 'update_time',
+                sort: "date"
+
             },
             {
                 title: 'Update by',
                 javaName: 'updateBy$',
                 dbName: 'update_by',
+                sort: "str"
 
             },
 
