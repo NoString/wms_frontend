@@ -48,7 +48,7 @@ export default () => {
     const items = [
         getItem('Home', '1', <HomeOutlined/>, [
             getItem(<NavLink to={'dashboard'}>Dashboard</NavLink>, '2', <Icons type={'icon-dashboard'}/>),
-            getItem(<NavLink to={'chart'}>Chart</NavLink>, '3', <Icons type={'icon-chart-bar'}/>),
+            // getItem(<NavLink to={'chart'}>Chart</NavLink>, '3', <Icons type={'icon-chart-bar'}/>),
 
         ]),
 
@@ -69,7 +69,7 @@ export default () => {
         getItem('Operation', '300', <ToolOutlined/>, [
             getItem(<NavLink to={'putIn'}>Put In</NavLink>, '301', <Icons type={'icon-in1157920easyiconnet'}/>),
             getItem(<NavLink to={'moveOut'}>Move Out</NavLink>, '302', <Icons type={'icon-outnet'}/>),
-            getItem(<NavLink to={'check'}>Check</NavLink>, '303', <Icons type={'icon-Statistics'}/>),
+            // getItem(<NavLink to={'check'}>Check</NavLink>, '303', <Icons type={'icon-Statistics'}/>),
             getItem(<NavLink to={'transfer'}>Transfer</NavLink>, '304', <Icons type={'icon-check'}/>),
         ]),
 
@@ -81,11 +81,11 @@ export default () => {
             getItem(<NavLink to={'dayOutDetail'}>Day Out Detail</NavLink>, '405', <Icons type={'icon-rizhi'}/>),
         ]),
         getItem('System', '500', <PushpinOutlined/>, [
-            getItem(<NavLink to={'menuList'}>Menu List</NavLink>, '501', <Icons type={'icon-menu'}/>),
-            getItem(<NavLink to={'privilege'}>Privilege</NavLink>, '502', <Icons type={'icon-privilege'}/>),
+            // getItem(<NavLink to={'menuList'}>Menu List</NavLink>, '501', <Icons type={'icon-menu'}/>),
+            // getItem(<NavLink to={'privilege'}>Privilege</NavLink>, '502', <Icons type={'icon-privilege'}/>),
             getItem(<NavLink to={'users'}>Users</NavLink>, '503', <Icons type={'icon-User-List'}/>),
         ]),
-        getItem('setting', '600', <UserOutlined/>, [
+        getItem('Setting', '600', <UserOutlined/>, [
             getItem(<NavLink to={'profile'}>Profile</NavLink>, '601', <Icons type={'icon-bu-profile-o'}/>),
         ]),
 

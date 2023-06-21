@@ -47,8 +47,8 @@ export default () => {
                             placeholder="gender"
                             options={[
                                 {
-                                    value: null,
-                                    label: null
+                                    value: '',
+                                    label: ''
                                 },
                                 {
                                     value: false,
@@ -170,10 +170,6 @@ export default () => {
                 }
 
             ],
-            showAdd: true,
-            showEdit: true,
-            showDelete: true,
-            showExport: true
         },
         tableFields : [
             {
@@ -218,13 +214,6 @@ export default () => {
                 javaName: 'role',
                 dbName: 'role',
 
-            },
-            {
-                title: 'Action',
-                key: 'action',
-                actions: [
-                    (<Button type="primary" size={'small'} style={{backgroundColor: 'lightseagreen'}}>Test</Button>)
-                ]
             }
 
         ]

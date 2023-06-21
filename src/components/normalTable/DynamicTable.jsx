@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import './dynamicTable.css'
 import {
     Button,
@@ -13,9 +13,9 @@ import {
     theme,
 
     Popconfirm,
-     Form
+    Form
 } from "antd";
-import { FileExcelOutlined} from "@ant-design/icons";
+import {FileExcelOutlined} from "@ant-design/icons";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
 import MultiAddModal from "./multiAddModal/MultiAddModal";
 import EditModal from "./editModal/EditModal";
@@ -23,7 +23,7 @@ import EditModal from "./editModal/EditModal";
 
 const DynamicTable = (props) => {
 
-    const {prefixUrl,searchConfig, operationConfig, tableFields} = props.config
+    const {prefixUrl, searchConfig, operationConfig, tableFields} = props.config
 
     const ExportJsonExcel = require("js-export-excel");
     let pathName = window.location.pathname.split('/')[1]
@@ -61,14 +61,14 @@ const DynamicTable = (props) => {
 
     const getTableData = async () => {
 
-        let respTableData = await reqQueryTable(null, prefixUrl+'/list');
+        let respTableData = await reqQueryTable(null, prefixUrl + '/list');
         setLoadingTableData(false)
         setTableData(respTableData.d)
     }
 
     const reloadTable = async () => {
         setLoadingTableData(true)
-        let result = await reqQueryTable({}, prefixUrl+'/list');
+        let result = await reqQueryTable({}, prefixUrl + '/list');
         setSelectedKeys([])
         setTableData(result.d)
         setLoadingTableData(false)
@@ -135,7 +135,7 @@ const DynamicTable = (props) => {
                     values[value] = undefined
                 }
             }
-            let reqQueryTable1 = await reqQueryTable(values, prefixUrl+'/list');
+            let reqQueryTable1 = await reqQueryTable(values, prefixUrl + '/list');
             setTableData(reqQueryTable1.d)
             setLoadingTableData(false)
         };
@@ -185,13 +185,14 @@ const DynamicTable = (props) => {
             message.error("You must choose one row!")
             return
         }
-        let tableData = await reqDeleteRows(selectedArr, prefixUrl+'/delete')
+        let tableData = await reqDeleteRows(selectedArr, prefixUrl + '/delete')
         reloadTable()
         message.success(tableData.msg)
     }
 
 
     const tableSelectChange = (key, selectedRows) => {
+
         setSelectedKeys(key)
         setSelectedArr(selectedRows)
     }
@@ -297,30 +298,23 @@ const DynamicTable = (props) => {
 
             fields.push(field)
         })
-        if (operationConfig.showEdit === true) {
-            let field = {};
-            field.title = "Edit"
-            field.key = "edit"
-            field.align = "center"
-            field.width = 60
-            field.render = (value) => {
-                field.fixed = "right"
-                return (
-                    <Space size="middle">
-                        {
-                            operationConfig.showEdit === true ? (
-                                <Button type="primary" size={'small'} style={{backgroundColor: 'lightseagreen'}}
-                                        onClick={() => handleEdit(value)}>Edit</Button>
-                            ) : (<span></span>)
-                        }
+        let field = {};
+        field.title = "Edit"
+        field.key = "edit"
+        field.align = "center"
+        field.width = 60
+        field.render = (value) => {
+            field.fixed = "right"
+            return (
+                <Space size="middle">
+                    <Button type="primary" size={'small'} style={{backgroundColor: 'lightseagreen'}}
+                            onClick={() => handleEdit(value)}>Edit</Button>
 
-                    </Space>
+                </Space>
 
-                )
-            }
-            fields.push(field)
+            )
         }
-
+        fields.push(field)
         return fields
     }
     const handleEdit = (value) => {
@@ -334,38 +328,24 @@ const DynamicTable = (props) => {
             <div className={'table-part'}>
                 <div className={'operation'}>
                     <div className="operation-normal">
-                        {
-                            operationConfig.showAdd === true ? (
-                                <Button type="primary" size={'middle'} onClick={() => {setIsAddModalOpen(true)}}>Add</Button>
-                            ) : (<div></div>)
-                        }
-                        {
-                            operationConfig.showDelete === true ? (
-                                <Popconfirm
-                                    title="Delete rows"
-                                    description="Are you sure to delete the rows?"
-                                    onConfirm={handleDelete}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button danger type="primary" size={'middle'}>Delete</Button>
-                                </Popconfirm>
-                            ) : (
-                                <div></div>
-                            )
-                        }
+                        <Button type="primary" size={'middle'} onClick={() => {
+                            setIsAddModalOpen(true)
+                        }}>Add</Button>
+
+                        <Popconfirm
+                            title="Delete rows"
+                            description="Are you sure to delete the rows?"
+                            onConfirm={handleDelete}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger type="primary" size={'middle'}>Delete</Button>
+                        </Popconfirm>
 
                     </div>
                     <div className="operation-output" span={12}>
-                        {
-                            operationConfig.showExport === true ? (
-                                <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}
-                                        onClick={exportExcel}/>
-
-                            ) : (
-                                <div></div>
-                            )
-                        }
+                        <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}
+                                onClick={exportExcel}/>
                     </div>
                 </div>
                 <Table
@@ -380,11 +360,11 @@ const DynamicTable = (props) => {
                         hideOnSinglePage: true,
                         size: "default"
                     }}
-                    rowSelection={operationConfig.showDelete === true ? {
+                    rowSelection={{
                         fixed: true,
                         onChange: tableSelectChange,
                         selectedRowKeys: selectedKeys,
-                    } : false}
+                    }}
                 />
             </div>
 
@@ -393,7 +373,8 @@ const DynamicTable = (props) => {
             {
                 isEditModalOpen === false ? (<div></div>) : (
                     <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
-                               reloadTable={reloadTable} fields={operationConfig.field} data={editData} prefixUrl={prefixUrl}/>)
+                               reloadTable={reloadTable} fields={operationConfig.field} data={editData}
+                               prefixUrl={prefixUrl}/>)
             }
 
         </div>

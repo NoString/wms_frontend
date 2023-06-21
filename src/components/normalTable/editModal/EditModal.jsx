@@ -10,7 +10,6 @@ export default (props) => {
 
     const [modalForm] = Form.useForm()
     const AdvancedModalForm = (key) => {
-        console.log(fields);
         return (
             <div key={key}>
                 <Form.Item
