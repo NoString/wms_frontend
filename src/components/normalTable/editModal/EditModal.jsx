@@ -1,11 +1,11 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Button, Carousel, Divider, Form, Input, message, Modal, Pagination, Select} from "antd";
-import {reqEditRow, reqEditRows} from "../../../api/table";
+import React from "react";
+import {Button, Divider, Form, Input, message, Modal} from "antd";
+import {reqEditRow} from "../../../api/table";
 
 
 export default (props) => {
 
-    const {isOpen, changeOpen, data, reloadTable, fields} = props
+    const {isOpen, changeOpen, data, reloadTable, fields, prefixUrl} = props
 
 
     const [modalForm] = Form.useForm()
@@ -63,7 +63,7 @@ export default (props) => {
     }
 
     const modalSubmit = async (data) => {
-        let result = await reqEditRow(data, "/users/edit")
+        let result = await reqEditRow(data, prefixUrl+"/edit")
         if (result.code === 200) {
             message.success(result.msg)
 

@@ -7,13 +7,17 @@ export default (props) => {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const {value,url, placeholder} = props;
+    const {value,url, placeholder,space} = props;
     const getData = async () => {
         let data = await reqInputSelect(url);
-        setData([{
-            label: '',
-            value: ''
-        }, ...data.d])
+        if (space === true){
+            setData([{
+                label: '',
+                value: ''
+            }, ...data.d])
+        }else {
+            setData([...data.d])
+        }
         setIsLoading(false)
     }
     useEffect(() => {

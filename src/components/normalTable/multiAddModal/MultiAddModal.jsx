@@ -1,10 +1,9 @@
 import React, {useRef, useState} from "react";
-import {Button, Carousel, Divider, Form, Input, message, Modal, Pagination, Select} from "antd";
-import InputSelect from "../../inputSelect/InputSelect";
+import {Button, Carousel, Divider, Form, Input, message, Modal, Pagination} from "antd";
 import {reqAddRows} from "../../../api/table";
 
 export default (props) => {
-    const {isOpen,changeOpen,reloadTable,fields} = props
+    const {isOpen,changeOpen,reloadTable,fields,prefixUrl} = props
 
     const [modalFormCurrent, setModalFormCurrent] = useState(1);
     const [modalFormCount, setModalFormCount] = useState(1);
@@ -85,7 +84,7 @@ export default (props) => {
             parseData[index][splitKey] = data[dataKey]
         }
 
-        let result = await reqAddRows(parseData,"/users/add")
+        let result = await reqAddRows(parseData,prefixUrl+"/add")
         if (result.code === 200) {
             message.success(result.msg)
 

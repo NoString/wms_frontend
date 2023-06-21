@@ -1,4 +1,4 @@
-import React, {createRef, useEffect, useRef, useState} from "react";
+import React, { useEffect, useState} from "react";
 import './dynamicTable.css'
 import {
     Button,
@@ -6,31 +6,24 @@ import {
     Input,
     message,
     Row,
-    Select,
+
     Space,
     Table,
-    Tag,
+
     theme,
-    DatePicker,
+
     Popconfirm,
-    InputNumber, Modal, Pagination, Carousel, Calendar, Divider, Form
+     Form
 } from "antd";
-import Search from "antd/es/input/Search";
-import {DownOutlined, FileExcelOutlined, PrinterOutlined} from "@ant-design/icons";
-import {Option} from "antd/es/mentions";
+import { FileExcelOutlined} from "@ant-design/icons";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
-import InputSelect from "../inputSelect/InputSelect";
-import {reqInputSelect} from "../../api/inputSelect";
-import {useToken} from "antd/es/theme/internal";
-import {useForm} from "antd/es/form/Form";
 import MultiAddModal from "./multiAddModal/MultiAddModal";
-import MultiEditModal from "./multiEditModal/MultiEditModal";
 import EditModal from "./editModal/EditModal";
 
 
 const DynamicTable = (props) => {
 
-    const {searchConfig, operationConfig,tableFields} = props.config
+    const {prefixUrl,searchConfig, operationConfig, tableFields} = props.config
 
     const ExportJsonExcel = require("js-export-excel");
     let pathName = window.location.pathname.split('/')[1]
@@ -64,16 +57,18 @@ const DynamicTable = (props) => {
     //多选框选中的key
     const [selectedKeys, setSelectedKeys] = useState([]);
 
+    /****************************************初始化****************************************/
 
     const getTableData = async () => {
-        let respTableData = await reqQueryTable(null, '/users/list');
+
+        let respTableData = await reqQueryTable(null, prefixUrl+'/list');
         setLoadingTableData(false)
         setTableData(respTableData.d)
     }
 
     const reloadTable = async () => {
         setLoadingTableData(true)
-        let result = await reqQueryTable({}, '/users/list');
+        let result = await reqQueryTable({}, prefixUrl+'/list');
         setSelectedKeys([])
         setTableData(result.d)
         setLoadingTableData(false)
@@ -85,116 +80,7 @@ const DynamicTable = (props) => {
 
     }, []);
 
-    const orderByLength = (pre,next,orderBy) => {
-        return pre.nickname.length - next.nickname.length
-    }
-
-
-    const getTableFields = () => {
-        let fields = []
-        tableFields.map((value,index) =>{
-            let field = {};
-            field.title = value.title
-            field.dataIndex = value.javaName
-            field.key = value.dbName
-            field.align = "center"
-            //给非Action的字段加上排序
-            if (value.title !== "Action"){
-                field.defaultSortOrder = 'descend'
-                if (value.order === "time") {
-
-                }else {
-                    field.sorter = (a,b,c) => {
-                        let date = new Date(a.updateTime)
-                        return a.nickname.length - b.nickname.length
-
-                    }
-                }
-
-            }
-            fields.push(field)
-        })
-        return fields
-    }
-    const columns = [
-        {
-            title: 'Nickname',
-            dataIndex: 'nickname',
-            key: 'nickname',
-            align: 'center',
-            defaultSortOrder: 'descend',
-            sorter: (a,b,c) => {
-                let date = new Date(a.updateTime)
-                console.log(date);
-                return a.nickname.length - b.nickname.length
-
-            }
-        },
-        {
-            title: 'Username',
-            dataIndex: 'username',
-            key: 'username',
-            align: 'center',
-
-        },
-        {
-            title: 'Mobile',
-            dataIndex: 'mobile',
-            align: 'center',
-            key: 'mobile',
-        },
-        {
-            title: 'Password',
-            dataIndex: 'password',
-            key: 'password',
-            align: 'center',
-
-        },
-        {
-            title: 'Gender',
-            dataIndex: 'gender$',
-            key: 'gender',
-            align: 'center',
-
-        },
-        {
-            title: 'Last Login',
-            dataIndex: 'lastLogin$',
-            key: 'last_login',
-            align: 'center',
-
-        },
-        {
-            title: 'Role',
-            dataIndex: 'role',
-            key: 'role',
-            align: 'center',
-
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            align: 'center',
-            fixed: 'right',
-            render: (value) => {
-                return (
-
-                    <Space size="middle">
-                        <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
-                                onClick={() => handleEdit(value)}>Edit</Button>
-                    </Space>
-                )
-            },
-        },
-
-    ];
-
-    const handleEdit = (value) => {
-        setEditData(value)
-        setIsEditModalOpen(true)
-    }
-
-
+    /****************************************search bar****************************************/
     const AdvancedSearchForm = () => {
         const {token} = theme.useToken();
         const [form] = Form.useForm();
@@ -236,40 +122,20 @@ const DynamicTable = (props) => {
                 }
                 children.push(child)
             })
-            if (searchConfig.all !== undefined && searchConfig.all !== false) {
-                children.push(
-                    <Col span={6} key={'all'}>
-                        <Form.Item
-                            name={`all`}>
-                            <Input placeholder="all"/>
-                        </Form.Item>
-                    </Col>
-                )
-            }
+
             return children;
         };
         const handleSearch = async (values) => {
             setLoadingTableData(true)
-            //模糊搜索,把所有前台展示columns发送回后台做sql拼接
-            if (values.all !== undefined) {
-                let searchColumns = [];
-                columns.forEach((i) => {
-                    searchColumns.push(i.key)
-                })
-                values.columns = searchColumns + '';
-            }
 
             //格式化antd时间选择器内容
-
             for (let value in values) {
                 if (values[value] instanceof Array) {
                     values[value + '_date'] = values[value] + ''
                     values[value] = undefined
                 }
             }
-
-
-            let reqQueryTable1 = await reqQueryTable(values, '/users/list');
+            let reqQueryTable1 = await reqQueryTable(values, prefixUrl+'/list');
             setTableData(reqQueryTable1.d)
             setLoadingTableData(false)
         };
@@ -309,31 +175,9 @@ const DynamicTable = (props) => {
         );
     };
 
-    const handleAddButton = () => {
-        setIsAddModalOpen(true);
-    };
+    /****************************************operation bar****************************************/
 
 
-    const handleEditButton = async () => {
-        if (selectedArr.length <= 0) {
-            message.error("You must choose one row!")
-            return;
-        }
-        if (selectedArr.length > 10) {
-            message.error("The choice of maximum is 10 rows.")
-            return;
-        }
-        const newFormData = {};
-
-        selectedArr.map((data, index) => {
-            for (let dataKey in data) {
-                newFormData[dataKey + "-" + index] = data[dataKey]
-            }
-        })
-
-        setIsEditModalOpen(true)
-
-    }
 
 
     const handleDelete = async () => {
@@ -341,7 +185,7 @@ const DynamicTable = (props) => {
             message.error("You must choose one row!")
             return
         }
-        let tableData = await reqDeleteRows(selectedArr, '/users/delete')
+        let tableData = await reqDeleteRows(selectedArr, prefixUrl+'/delete')
         reloadTable()
         message.success(tableData.msg)
     }
@@ -359,8 +203,9 @@ const DynamicTable = (props) => {
         }
         let excelColumns = []
         let sheetData = []
-        for (let i = 0; i < columns.length; i++) {
-            excelColumns.push(columns[i].dataIndex)
+        let fields = getTableFields();
+        for (let i = 0; i < fields.length; i++) {
+            excelColumns.push(fields[i].dataIndex)
         }
 
         selectedArr.map((obj) => {
@@ -391,6 +236,98 @@ const DynamicTable = (props) => {
     }
 
 
+    /****************************************table****************************************/
+    const getTableFields = () => {
+        let fields = []
+        tableFields.map((value, index) => {
+
+            let field = {};
+            field.title = value.title
+            field.dataIndex = value.javaName
+            field.key = value.dbName
+            field.align = "center"
+
+
+            //排序代码
+            if (value.sort !== undefined) {
+                switch (value.sort) {
+                    case "str":
+                        field.sorter = (a, b, c) => {
+                            return a[value.javaName].length - b[value.javaName].length
+
+                        }
+                        break
+                    case "num":
+                        field.sorter = (a, b, c) => {
+
+                            return a[value.javaName] - b[value.javaName]
+
+                        }
+                        break
+                    case "date":
+                        field.sorter = (a, b, c) => {
+                            let preDate = new Date(a[value.javaName.split("$")[0]])
+                            let nextDate = new Date(b[value.javaName.split("$")[0]])
+
+                            return preDate - nextDate
+                        }
+                        break
+                }
+            }
+
+            //自定义功能代码
+            if (field.title === "Action") {
+                field.render = () => {
+                    return (
+                        <Space size="middle">
+                            {
+                                value.actions.map((v, index) => {
+                                    return (
+                                        <span key={index}>
+                                    {v}
+                                </span>)
+                                })
+                            }
+                        </Space>
+                    )
+                }
+
+            }
+
+
+            fields.push(field)
+        })
+        if (operationConfig.showEdit === true) {
+            let field = {};
+            field.title = "Edit"
+            field.key = "edit"
+            field.align = "center"
+            field.width = 60
+            field.render = (value) => {
+                field.fixed = "right"
+                return (
+                    <Space size="middle">
+                        {
+                            operationConfig.showEdit === true ? (
+                                <Button type="primary" size={'small'} style={{backgroundColor: 'lightseagreen'}}
+                                        onClick={() => handleEdit(value)}>Edit</Button>
+                            ) : (<span></span>)
+                        }
+
+                    </Space>
+
+                )
+            }
+            fields.push(field)
+        }
+
+        return fields
+    }
+    const handleEdit = (value) => {
+        setEditData(value)
+        setIsEditModalOpen(true)
+    }
+
     return (
         <div className={'normalTable'}>
             <AdvancedSearchForm/>
@@ -398,9 +335,9 @@ const DynamicTable = (props) => {
                 <div className={'operation'}>
                     <div className="operation-normal">
                         {
-                            operationConfig.showAdd=== true ? (
-                                <Button type="primary" size={'middle'} onClick={handleAddButton}>Add</Button>
-                            ):(<div></div>)
+                            operationConfig.showAdd === true ? (
+                                <Button type="primary" size={'middle'} onClick={() => {setIsAddModalOpen(true)}}>Add</Button>
+                            ) : (<div></div>)
                         }
                         {
                             operationConfig.showDelete === true ? (
@@ -413,7 +350,7 @@ const DynamicTable = (props) => {
                                 >
                                     <Button danger type="primary" size={'middle'}>Delete</Button>
                                 </Popconfirm>
-                            ): (
+                            ) : (
                                 <div></div>
                             )
                         }
@@ -422,16 +359,18 @@ const DynamicTable = (props) => {
                     <div className="operation-output" span={12}>
                         {
                             operationConfig.showExport === true ? (
-                                <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>} onClick={exportExcel}/>
+                                <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}
+                                        onClick={exportExcel}/>
 
-                            ):(
+                            ) : (
                                 <div></div>
                             )
                         }
                     </div>
                 </div>
                 <Table
-                    columns={columns}
+                    // columns={columns}
+                    columns={getTableFields()}
                     dataSource={tableData}
                     className={'main-table'}
                     loading={loadingTableData}
@@ -450,11 +389,11 @@ const DynamicTable = (props) => {
             </div>
 
             <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
-                           reloadTable={reloadTable} fields={operationConfig.field}/>
+                           reloadTable={reloadTable} fields={operationConfig.field} prefixUrl={prefixUrl}/>
             {
                 isEditModalOpen === false ? (<div></div>) : (
-            <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
-                       reloadTable={reloadTable} fields={operationConfig.field} data={editData}/>)
+                    <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
+                               reloadTable={reloadTable} fields={operationConfig.field} data={editData} prefixUrl={prefixUrl}/>)
             }
 
         </div>

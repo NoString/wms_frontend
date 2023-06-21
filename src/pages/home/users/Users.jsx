@@ -1,7 +1,7 @@
 import React from "react";
 import './users.css'
 import DynamicTable from "../../../components/normalTable/DynamicTable";
-import {Button, DatePicker, Select, Space} from "antd";
+import {Button, DatePicker, Select} from "antd";
 import InputSelect from "../../../components/inputSelect/InputSelect";
 
 export default () => {
@@ -9,10 +9,11 @@ export default () => {
     const {RangePicker} = DatePicker;
 
     const config = {
+        prefixUrl: "/users",
         //配置search栏
         searchConfig: {
             // 是否开启全字段模糊搜索
-            all: true,
+
             // 具体搜索栏内容
             searchField: [
                 {
@@ -72,7 +73,7 @@ export default () => {
                     name: "role_id",
                     notInput: true,
                     code: (
-                        <InputSelect url={"/role/query"}/>
+                        <InputSelect url={"/role/query"} placeholder={"Role"} space={true}/>
                     )
                 }
 
@@ -177,72 +178,53 @@ export default () => {
         tableFields : [
             {
                 title: 'Nickname',
-                dataIndex: 'nickname',
-                key: 'nickname',
-                align: 'center',
-                defaultSortOrder: 'descend',
-                sorter: (a,b,c) => {
-                    let date = new Date(a.updateTime)
-                    console.log(date);
-                    return a.nickname.length - b.nickname.length
-
-                }
+                javaName: 'nickname',
+                dbName: 'nickname',
+                sort: "str"
             },
             {
                 title: 'Username',
-                dataIndex: 'username',
-                key: 'username',
-                align: 'center',
+                javaName: 'username',
+                dbName: 'username',
 
             },
             {
                 title: 'Mobile',
-                dataIndex: 'mobile',
-                align: 'center',
-                key: 'mobile',
+                javaName: 'mobile',
+                dbName: 'center',
             },
             {
                 title: 'Password',
-                dataIndex: 'password',
-                key: 'password',
-                align: 'center',
+                javaName: 'password',
+                dbName: 'password',
+                sort: "num"
+
 
             },
             {
                 title: 'Gender',
-                dataIndex: 'gender$',
-                key: 'gender',
-                align: 'center',
+                javaName: 'gender$',
+                dbName: 'gender',
 
             },
             {
                 title: 'Last Login',
-                dataIndex: 'lastLogin$',
-                key: 'last_login',
-                align: 'center',
-
+                javaName: 'lastLogin$',
+                dbName: 'last_login',
+                sort: "date"
             },
             {
                 title: 'Role',
-                dataIndex: 'role',
-                key: 'role',
-                align: 'center',
+                javaName: 'role',
+                dbName: 'role',
 
             },
             {
                 title: 'Action',
                 key: 'action',
-                align: 'center',
-                fixed: 'right',
-                render: (value) => {
-                    return (
-
-                        <Space size="middle">
-                            <Button type="primary" size={'middle'} style={{backgroundColor: 'lightseagreen'}}
-                                    onClick={() => handleEdit(value)}>Edit</Button>
-                        </Space>
-                    )
-                },
+                actions: [
+                    (<Button type="primary" size={'small'} style={{backgroundColor: 'lightseagreen'}}>Test</Button>)
+                ]
             }
 
         ]
