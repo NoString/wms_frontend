@@ -1,6 +1,6 @@
 import React, {useRef, useState} from "react";
 import './header.css'
-import {Button, Divider, Dropdown, Select, Space, Tabs} from "antd";
+import {Button, Divider, Dropdown, message, Select, Space, Tabs} from "antd";
 import {
     CloseCircleOutlined, CloseOutlined,
     DownOutlined,
@@ -14,14 +14,15 @@ import {Navigate, useLocation, useNavigate} from "react-router-dom";
 import Icon from "antd/es/icon";
 
 export default (props) => {
+
     let {collapsed, setCollapsed} = props;
     const toggleCollapsed = () => {
         setCollapsed(!collapsed)
     }
-    const location = useLocation()
+    const reactLocation = useLocation()
     const navigate = useNavigate();
     const refresh = () => {
-        navigate(location.pathname)
+        navigate(reactLocation.pathname)
     }
     const onChange = (value) => {
         console.log(`selected ${value}`);
@@ -29,6 +30,10 @@ export default (props) => {
     const onSearch = (value) => {
         console.log('search:', value);
     };
+
+
+
+
     const items = [
         {
             key: '1',
@@ -39,12 +44,8 @@ export default (props) => {
             ),
         },
         {
-            key: '2',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    Log out
-                </a>
-            ),
+            key: 'logout',
+            label: 'Log out',
         },
     ]
     const initialItems = [
@@ -111,6 +112,16 @@ export default (props) => {
                     <Dropdown
                         menu={{
                             items,
+                            onClick : ({key}) => {
+                                switch (key) {
+                                    case 'logout':
+                                        // If user click the Log out Button, clear all local data, then return the log in page
+                                        localStorage.clear()
+                                        navigate('/login')
+                                        message.success("Log out successfully")
+                                        break
+                                }
+                            }
                         }}
                     >
                         <a onClick={(e) => e.preventDefault()}>
