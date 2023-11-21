@@ -8,6 +8,8 @@ export default (props) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const {value,url, placeholder,space} = props;
+    const [defauleLabel, setDefauleLabel] = useState();
+    console.log(props);
     const getData = async () => {
         let data = await reqInputSelect(url);
         if (space === true){
@@ -30,7 +32,6 @@ export default (props) => {
             onChange={props.onChange}
             placeholder={placeholder}
             loading={isLoading}
-            value={value}
         />
     )
 }

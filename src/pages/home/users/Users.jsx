@@ -9,7 +9,7 @@ export default () => {
     const {RangePicker} = DatePicker;
 
     const config = {
-        prefixUrl: "/users",
+        prefixUrl: "/user",
         //配置search栏
         searchConfig: {
             // 是否开启全字段模糊搜索
@@ -20,11 +20,7 @@ export default () => {
                     //name是传递给后台的key
                     name: "nickname",
                     // 输入框展示的内容
-                    placeholder: "Nickname",
-                    rule: [{
-                        required: true,
-                        message: "Please, choose a role"
-                    }],
+                    placeholder: "Nickname"
                 },
                 {
                     name: "username",
@@ -68,13 +64,6 @@ export default () => {
                     code: (
                         <RangePicker/>
                     )
-                },
-                {
-                    name: "role_id",
-                    notInput: true,
-                    code: (
-                        <InputSelect url={"/role/query"} placeholder={"Role"} space={true}/>
-                    )
                 }
 
             ]
@@ -89,8 +78,8 @@ export default () => {
                     rules: [{
                         required: true,
                         message: 'Please input your nickname!',
-                        type:"string",
-                        min:3
+                        type: "string",
+                        min: 4
                     }]
                 },
                 {
@@ -99,79 +88,64 @@ export default () => {
                     rules: [{
                         required: true,
                         message: 'Please input your username!',
-                        type:"string",
-                        min:6
+                        type: "string",
+                        min: 4
                     }]
-                },{
+                },
+                {
+                    label: "Password",
+                    name: "password",
+                    rules: [{
+                        required: true,
+                        message: 'Please input your password!',
+                        type: "string",
+                        min: 4
+                    }]
+                },
+                {
                     label: "Email",
                     name: "email",
                     rules: [{
                         required: true,
                         message: 'Please input your email!',
-                        type:"email"
+                        type: "email"
                     }]
-                },
-
-                {
-                    label: "Mobile",
-                    name: "mobile",
                 }
                 , {
                     label: "Gender",
                     name: "gender",
-                    notInput:true,
-                    code:(
-                        <Select
-
-                            placeholder="gender"
-
-                            options={[
-
-                                {
-                                    value: null,
-                                    label: ''
-                                },
-                                {
-                                    value: false,
-                                    label: 'Female',
-                                }, {
-                                    value: true,
-                                    label: 'Male',
-                                },
-                            ]}
-                        />
-                    )
-                }
-                ,
-                {
-                    label: "Role",
-                    name: "roleId",
-                    rules:[{
-                        required: true,
-                        message: 'Please choose the role!',
+                    rules: [{
+                        required: true
                     }],
                     notInput: true,
                     code: (
-                        <InputSelect url={"/role/query"} placeholder={'Role'}/>
+                        <Select
+                            placeholder="gender">
+                            <Select.Option value={true}>Male</Select.Option>
+                            <Select.Option value={false}>Female</Select.Option>
+                        </Select>
+
                     )
                 }
-                ,
-                {
+                , {
                     label: "Status",
                     name: "status",
-                    rules:[{
-                        required: true,
-                        message: 'Please choose the status!',
+                    rules: [{
+                        required: true
                     }],
                     notInput: true,
                     code: (
-                        <InputSelect url={"users/status/query"} placeholder={'Status'}/>
+                        <Select
+                            placeholder="Status">
+                            <Select.Option value={true}>Available</Select.Option>
+                            <Select.Option value={false}>Unavailable</Select.Option>
+                        </Select>
                     )
                 }
 
             ],
         },
-        tableFields : [
+        tableFields: [
             {
                 title: 'Nickname',
                 javaName: 'nickname',
@@ -208,12 +182,6 @@ export default () => {
                 javaName: 'lastLogin$',
                 dbName: 'last_login',
                 sort: "date"
-            },
-            {
-                title: 'Role',
-                javaName: 'role',
-                dbName: 'role',
-
             }
 
         ]

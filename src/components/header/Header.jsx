@@ -115,7 +115,7 @@ export default (props) => {
                             onClick : ({key}) => {
                                 switch (key) {
                                     case 'logout':
-                                        // If user click the Log out Button, clear all local data, then return the log in page
+                                        // If user click the Log-out Button, clear all local data, then return the login page
                                         localStorage.clear()
                                         navigate('/login')
                                         message.success("Log out successfully")

@@ -17,8 +17,8 @@ import {
 } from "antd";
 import {FileExcelOutlined} from "@ant-design/icons";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
-import MultiAddModal from "./multiAddModal/MultiAddModal";
 import EditModal from "./editModal/EditModal";
+import AddModal from "./addModal/AddModal";
 
 
 const DynamicTable = (props) => {
@@ -349,7 +349,7 @@ const DynamicTable = (props) => {
                     </div>
                 </div>
                 <Table
-                    // columns={columns}
+
                     columns={getTableFields()}
                     dataSource={tableData}
                     className={'main-table'}
@@ -368,7 +368,7 @@ const DynamicTable = (props) => {
                 />
             </div>
 
-            <MultiAddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
+            <AddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
                            reloadTable={reloadTable} fields={operationConfig.field} prefixUrl={prefixUrl}/>
             {
                 isEditModalOpen === false ? (<div></div>) : (

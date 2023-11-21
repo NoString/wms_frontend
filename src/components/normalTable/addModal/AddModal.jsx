@@ -1,54 +1,37 @@
-import React, {useState} from "react";
-import {Button, Divider, Form, Input, message, Modal} from "antd";
-import {reqEditRow} from "../../../api/table";
-import {reqInputSelect} from "../../../api/inputSelect";
-
+import React, {useRef, useState} from "react";
+import {Button, Carousel, Divider, Form, Input, message, Modal, Pagination} from "antd";
+import {reqAddRows} from "../../../api/table";
 
 export default (props) => {
-
-    const {isOpen, changeOpen, data, reloadTable, fields, prefixUrl} = props
+    const {isOpen,changeOpen,reloadTable,fields,prefixUrl} = props
 
     const [modalForm] = Form.useForm()
 
 
-
-    const AdvancedModalForm =  (key) => {
+    const AdvancedModalForm = (key) => {
         return (
             <div key={key}>
-                <Form.Item
-                label={'Id'}
-                name={'id'}
-                style={{display:"none"}}
-                >
-                    <Input/>
-                </Form.Item>
                 {
-
-
-                    fields.map ((item, index) => {
-                        if (item.notInput === true) {
-                            return (<Form.Item
+                    fields.map((item,index) =>{
+                        return item.notInput === true ? (
+                            <Form.Item
                                 label={item.label}
                                 name={item.name}
+                                key={index + 1}
                                 rules={item.rules}
-                                key={index + ''}
                             >
-                                {
-                                    item.code
-                                }
-                            </Form.Item>)
-                        } else {
-                            return (<Form.Item
+                                {item.code}
+                            </Form.Item>
+                        ) : (
+                            <Form.Item
                                 label={item.label}
                                 name={item.name}
+                                key={index + 1}
                                 rules={item.rules}
-                                key={index + ''}
-
                             >
                                 <Input/>
-                            </Form.Item>)
-                        }
-
+                            </Form.Item>
+                        )
                     })
                 }
 
@@ -57,17 +40,13 @@ export default (props) => {
         )
     }
 
-
-    const modalClose = () => {
-        changeOpen()
-    }
-
     const modalSubmit = async (data) => {
-        let result = await reqEditRow(data, prefixUrl+"/edit")
+
+        let result = await reqAddRows(data,prefixUrl+"/add")
         if (result.code === 200) {
             message.success(result.msg)
 
-        } else {
+        }else {
             message.error(result.msg)
         }
         reloadTable()
@@ -83,14 +62,14 @@ export default (props) => {
                     modalForm.submit()
                 }}>
             Save
-        </Button>,
+        </Button>
     ]
 
     return (
         <Modal
             open={isOpen}
             footer={modalButtons}
-            onCancel={modalClose}
+            onCancel={() =>changeOpen()}
             maskClosable={false}
             destroyOnClose={true}
         >
@@ -101,17 +80,15 @@ export default (props) => {
                 wrapperCol={{
                     span: 18,
                 }}
-                name="mutilAddModal"
+                name="addModal"
                 labelAlign={'right'}
                 form={modalForm}
                 onFinish={modalSubmit}
                 preserve={false}
-                initialValues={data}
             >
                 <Divider orientation={"left"}>Add {window.location.pathname.split('/')[1]}</Divider>
-                {
-                    AdvancedModalForm()
-                }
+
+                <AdvancedModalForm/>
             </Form>
         </Modal>
     )
