@@ -159,11 +159,6 @@ export default () => {
 
             },
             {
-                title: 'Mobile',
-                javaName: 'mobile',
-                dbName: 'center',
-            },
-            {
                 title: 'Password',
                 javaName: 'password',
                 dbName: 'password',
@@ -172,10 +167,27 @@ export default () => {
 
             },
             {
+                title: 'E-mail',
+                javaName: 'email',
+                dbName: 'email',
+
+            },
+            {
                 title: 'Gender',
                 javaName: 'gender$',
                 dbName: 'gender',
 
+            },
+            {
+                title: 'Create Date',
+                javaName: 'createTime$',
+                dbName: 'create_time',
+                sort: "date"
+            },
+            {
+                title: 'Create User',
+                javaName: 'createBy$',
+                dbName: 'create_by'
             },
             {
                 title: 'Last Login',
