@@ -9,7 +9,6 @@ export default (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const {value,url, placeholder,space} = props;
     const [defauleLabel, setDefauleLabel] = useState();
-    console.log(props);
     const getData = async () => {
         let data = await reqInputSelect(url);
         if (space === true){

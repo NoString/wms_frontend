@@ -17,7 +17,7 @@ export default (props) => {
                             <Form.Item
                                 label={item.label}
                                 name={item.name}
-                                key={index + 1}
+                                key={index + ''}
                                 rules={item.rules}
                             >
                                 {item.code}
@@ -26,7 +26,7 @@ export default (props) => {
                             <Form.Item
                                 label={item.label}
                                 name={item.name}
-                                key={index + 1}
+                                key={index + ''}
                                 rules={item.rules}
                             >
                                 <Input/>

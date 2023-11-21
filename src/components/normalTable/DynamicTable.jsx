@@ -22,7 +22,7 @@ import AddModal from "./addModal/AddModal";
 
 
 const DynamicTable = (props) => {
-
+    console.log(props);
     const {prefixUrl, searchConfig, operationConfig, tableFields} = props.config
 
     const ExportJsonExcel = require("js-export-excel");

@@ -33,7 +33,7 @@ export default () => {
                         required: true,
                         message: 'Please input your category Name!',
                         type: "string",
-                        min: 3
+                        min: 4
                     }]
                 },
                 {
@@ -62,27 +62,27 @@ export default () => {
                 dbName: 'memo',
             },
             {
-                title: 'Create time',
+                title: 'Create Date',
                 javaName: 'createTime$',
                 dbName: 'create_time',
                 sort: "date"
             },
             {
-                title: 'Create by',
+                title: 'Create User',
                 javaName: 'createBy$',
                 dbName: 'create_by',
                 sort: "str"
 
             },
             {
-                title: 'Update time',
+                title: 'Update Date',
                 javaName: 'updateTime$',
                 dbName: 'update_time',
                 sort: "date"
 
             },
             {
-                title: 'Update by',
+                title: 'Update User',
                 javaName: 'updateBy$',
                 dbName: 'update_by',
                 sort: "str"
