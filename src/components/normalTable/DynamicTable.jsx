@@ -315,7 +315,9 @@ const DynamicTable = (props) => {
 
             )
         }
-        fields.push(field)
+        if (operationConfig.disableEdit !== true) {
+            fields.push(field)
+        }
         return fields
     }
     const handleEdit = (value) => {
@@ -329,22 +331,33 @@ const DynamicTable = (props) => {
             <div className={'table-part'}>
                 <div className={'operation'}>
                     <div className="operation-normal">
-                        <Button type="primary" size={'middle'} onClick={() => {
-                            setIsAddModalOpen(true)
-                        }}>Add</Button>
+                        {
+                            operationConfig.disableAdd === true ? (<div></div>) : (
+                                <Button type="primary" size={'middle'} onClick={() => {
+                                    setIsAddModalOpen(true)
+                                }}>Add</Button>
+                            )
+                        }
 
-                        <Popconfirm
-                            title="Delete rows"
-                            description="Are you sure to delete the rows?"
-                            onConfirm={handleDelete}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button danger type="primary" size={'middle'}>Delete</Button>
-                        </Popconfirm>
+
+                        {
+                            operationConfig.disableDelete === true ? (<div></div>) : (
+                                <Popconfirm
+                                    title="Delete rows"
+                                    description="Are you sure to delete the rows?"
+                                    onConfirm={handleDelete}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button danger type="primary" size={'middle'}>Delete</Button>
+                                </Popconfirm>
+                            )
+                        }
+
 
                     </div>
                     <div className="operation-output" span={12}>
+
                         <Button size={"middle"} shape="circle" icon={<FileExcelOutlined/>}
                                 onClick={exportExcel}/>
                     </div>
@@ -368,8 +381,9 @@ const DynamicTable = (props) => {
                 />
             </div>
 
+
             <AddModal isOpen={isAddModalOpen} changeOpen={() => setIsAddModalOpen(!isAddModalOpen)}
-                           reloadTable={reloadTable} fields={operationConfig.field} prefixUrl={prefixUrl}/>
+                      reloadTable={reloadTable} fields={operationConfig.field} prefixUrl={prefixUrl}/>
             {
                 isEditModalOpen === false ? (<div></div>) : (
                     <EditModal isOpen={isEditModalOpen} changeOpen={() => setIsEditModalOpen(!isEditModalOpen)}
