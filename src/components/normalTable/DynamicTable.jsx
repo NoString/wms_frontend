@@ -373,7 +373,8 @@ const DynamicTable = (props) => {
                         hideOnSinglePage: true,
                         size: "default"
                     }}
-                    rowSelection={{
+
+                    rowSelection={operationConfig.disableDelete === true ? null : {
                         fixed: true,
                         onChange: tableSelectChange,
                         selectedRowKeys: selectedKeys,
