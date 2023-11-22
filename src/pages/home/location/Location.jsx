@@ -1,6 +1,7 @@
 import React from "react";
 import './location.css'
 import DynamicTable from "../../../components/normalTable/DynamicTable";
+import {Select} from "antd";
 
 export default () =>{
 
@@ -37,10 +38,24 @@ export default () =>{
         },
         operationConfig: {
             disableAdd: true,
-            disableEdit: true,
             disableDelete: true,
             field: [
+                {
+                    label: "Location Status",
+                    name: "locSts",
+                    rules: [{
+                        required: true
+                    }],
+                    itemType: "select",
+                    code: (
+                        <Select
+                            placeholder="Location Status">
+                            <Select.Option value={"E.Empty Storage"}>E.Empty Storage</Select.Option>
+                            <Select.Option value={"B.Banned Storage"}>B.Banned Storage</Select.Option>
+                        </Select>
 
+                    )
+                }
             ],
         },
         tableFields: [

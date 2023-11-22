@@ -374,7 +374,7 @@ const DynamicTable = (props) => {
                         size: "default"
                     }}
 
-                    rowSelection={operationConfig.disableDelete === true ? null : {
+                    rowSelection={{
                         fixed: true,
                         onChange: tableSelectChange,
                         selectedRowKeys: selectedKeys,
