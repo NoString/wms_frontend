@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {Button, Divider, Form, Input, message, Modal} from "antd";
+import {Button, Divider, Form, Input, InputNumber, message, Modal} from "antd";
 import {reqEditRow} from "../../../api/table";
-import {reqInputSelect} from "../../../api/inputSelect";
+
 
 
 export default (props) => {
@@ -9,7 +9,11 @@ export default (props) => {
     const {isOpen, changeOpen, data, reloadTable, fields, prefixUrl} = props
 
     const [modalForm] = Form.useForm()
-
+    const changeNumber = (item1, item2, item3) => {
+        console.log(item1);
+        console.log(item2);
+        console.log(item3);
+    }
 
 
     const AdvancedModalForm =  (key) => {
@@ -23,32 +27,39 @@ export default (props) => {
                     <Input/>
                 </Form.Item>
                 {
+                    fields.map((item, index) => {
 
-
-                    fields.map ((item, index) => {
-                        if (item.notInput === true) {
-                            return (<Form.Item
-                                label={item.label}
-                                name={item.name}
-                                rules={item.rules}
-                                key={index + ''}
-                            >
-                                {
-                                    item.code
-                                }
-                            </Form.Item>)
-                        } else {
-                            return (<Form.Item
-                                label={item.label}
-                                name={item.name}
-                                rules={item.rules}
-                                key={index + ''}
-
-                            >
-                                <Input/>
-                            </Form.Item>)
+                        switch (item.itemType) {
+                            case "select":
+                                return (
+                                    <Form.Item
+                                        label={item.label}
+                                        name={item.name}
+                                        key={index + ''}
+                                        rules={item.rules}
+                                    >
+                                        {item.code}
+                                    </Form.Item>
+                                )
+                            case "inputNumber":
+                                return (<Form.Item
+                                    label={item.label}
+                                    name={item.name}
+                                    key={index + ''}
+                                    rules={item.rules}
+                                >
+                                    <InputNumber min={item.min} max={item.max} />
+                                </Form.Item>)
+                            default:
+                                return (<Form.Item
+                                    label={item.label}
+                                    name={item.name}
+                                    key={index + ''}
+                                    rules={item.rules}
+                                >
+                                    <Input/>
+                                </Form.Item>)
                         }
-
                     })
                 }
 

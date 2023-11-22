@@ -13,7 +13,9 @@ export default (url, data={}, requestType='g') => {
             promise =  axios.get( url,{
                 params: data,
                 headers:{
-                    token: localStorage.getItem("token")
+                    token: localStorage.getItem("token"),
+                    id: localStorage.getItem("id"),
+                    username : localStorage.getItem("username")
                 }
 
             })
@@ -21,7 +23,8 @@ export default (url, data={}, requestType='g') => {
             promise = axios.post( url,data,{
                 headers:{
                     token: localStorage.getItem("token"),
-                    id: localStorage.getItem("id")
+                    id: localStorage.getItem("id"),
+                    username : localStorage.getItem("username")
                 }
             })
         }

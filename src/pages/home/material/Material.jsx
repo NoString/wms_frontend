@@ -27,16 +27,16 @@ export default () =>{
                     placeholder: "Material Code"
                 },
                 {
-                    name: "classifyName",
+                    name: "classify_name",
                     placeholder: "Classify Name"
                 },
                 {
-                    name: "expiredDay",
+                    name: "expired_day",
                     placeholder: "Expired Day"
                 },
                 {
-                    name: "createBy",
-                    placeholder: "Create User"
+                    name: "update_by",
+                    placeholder: "Update User"
                 }
             ]
         },
@@ -68,10 +68,16 @@ export default () =>{
                     name: "classifyName",
                     rules: [{
                         required: true,
-                        message: 'Please input something!',
-                        type: "string",
-                        min: 4
-                    }]
+                    }],
+                    itemType: "select",
+                    code: (
+                        <Select
+                            placeholder="Classify Name">
+                            <Select.Option value={"Goods"}>Goods</Select.Option>
+                            <Select.Option value={"Semi-finished product"}>Semi-finished product</Select.Option>
+                            <Select.Option value={"Material"}>Material</Select.Option>
+                        </Select>
+                    )
 
                 },
                 {
@@ -79,13 +85,14 @@ export default () =>{
                     name: "expiredDay",
                     rules: [{
                         required: true,
-                        message: 'Please input something!',
-                        type: "number",
-                    }]
+                    }],
+                    itemType: "inputNumber",
+                    min: 1
 
                 },{
                     label: "Weight",
                     name: "weight",
+                    itemType: "inputNumber",
                 },{
                     label: "Color",
                     name: "color",
@@ -105,27 +112,32 @@ export default () =>{
                 title: 'Material Name',
                 javaName: 'name',
                 dbName: 'name',
+                sort: "str"
 
             },
             {
                 title: 'Material Code',
                 javaName: 'code',
                 dbName: 'code',
+                sort: "str"
             },
             {
                 title: 'Classify Name',
                 javaName: 'classifyName',
                 dbName: 'classify_name',
+                sort: "str"
             },
             {
                 title: 'Expired Day',
                 javaName: 'expiredDay',
                 dbName: 'expired_day',
+                sort: "num"
             },
             {
                 title: 'Weight',
                 javaName: 'weight',
                 dbName: 'weight',
+                sort: "num"
             },
             {
                 title: 'Color',
@@ -141,6 +153,11 @@ export default () =>{
                 title: 'Memo',
                 javaName: 'memo',
                 dbName: 'memo',
+            },{
+                title: 'Update User',
+                javaName: 'updateBy',
+                dbName: 'update_by',
+                sort: "str"
             },
         ]
     }

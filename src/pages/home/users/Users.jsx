@@ -117,7 +117,7 @@ export default () => {
                     rules: [{
                         required: true
                     }],
-                    notInput: true,
+                    itemType: "select",
                     code: (
                         <Select
                             placeholder="gender">
@@ -133,7 +133,7 @@ export default () => {
                     rules: [{
                         required: true
                     }],
-                    notInput: true,
+                    itemType: "select",
                     code: (
                         <Select
                             placeholder="Status">
