@@ -19,6 +19,7 @@ import {FileExcelOutlined} from "@ant-design/icons";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
 import EditModal from "./editModal/EditModal";
 import AddModal from "./addModal/AddModal";
+import login from "../../pages/login/Login";
 
 
 const DynamicTable = (props) => {
@@ -249,6 +250,9 @@ const DynamicTable = (props) => {
             field.key = value.dbName
             field.align = "center"
 
+            if (value.render !== undefined) {
+                field.render = value.render
+            }
 
             //排序代码
             if (value.sort !== undefined) {
@@ -277,28 +281,10 @@ const DynamicTable = (props) => {
                 }
             }
 
-            //自定义功能代码
-            if (field.title === "Action") {
-                field.render = () => {
-                    return (
-                        <Space size="middle">
-                            {
-                                value.actions.map((v, index) => {
-                                    return (
-                                        <span key={index}>
-                                    {v}
-                                </span>)
-                                })
-                            }
-                        </Space>
-                    )
-                }
-
-            }
-
-
             fields.push(field)
         })
+
+
         let field = {};
         field.title = "Edit"
         field.key = "edit"

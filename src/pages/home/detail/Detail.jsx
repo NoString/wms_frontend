@@ -1,8 +1,15 @@
 import React from "react";
 import './detail.css'
 import DynamicTable from "../../../components/normalTable/DynamicTable";
-import {Select} from "antd";
+import {Progress, Select} from "antd";
+import Title from "antd/lib/typography/Title";
 export default () =>{
+
+    const renderProgress = (v1,v2,v3) => {
+        console.log(v1);
+        console.log(v2);
+        console.log(v3);
+    }
     let config = {
         prefixUrl: "/common/wmsLocTail",
         //配置search栏
@@ -49,33 +56,47 @@ export default () =>{
                 sort: "num"
             },{
                 title: 'Material Name',
-                javaName: 'mName',
+                javaName: 'name',
                 dbName: 'm_name',
                 sort: "str"
             },{
                 title: 'Material Code',
-                javaName: 'mCode',
+                javaName: 'code',
                 dbName: 'm_code',
                 sort: "str"
             },{
                 title: 'Classify Name',
-                javaName: 'mClassifyName',
+                javaName: 'classifyName',
                 dbName: 'm_classify_name',
                 sort: "str"
-            },{
-                title: 'Expired Day',
-                javaName: 'mExpiredDay',
-                dbName: 'm_expired_day',
+            },
+            {
+                title: 'Expired Progress',
+                dbName: 'progress',
+
+                render: (value) => {
+
+                    return (
+                        <Progress percent={value.progress}
+                                  size={[200,10]}
+                                  status={null}/>
+                    )
+                }
+            },
+            {
+                title: 'Expired Date',
+                javaName: 'expiredDate$',
+                dbName: 'm_expired_date',
                 sort: "date"
             },{
-                title: 'Update Time',
-                javaName: 'updateTime',
-                dbName: 'update_time',
+                title: 'Create Date',
+                javaName: 'createTime$',
+                dbName: 'create_time',
                 sort: "date"
             },{
-                title: 'Update User',
-                javaName: 'updateBy',
-                dbName: 'update_by',
+                title: 'Create User',
+                javaName: 'createBy',
+                dbName: 'create_by',
                 sort: "date"
             },
 
