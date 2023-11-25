@@ -22,4 +22,10 @@
 .normalTable .rightInput {
   padding-left: 10px;
 }
+.normalTable .rightInput .table-part {
+  margin-top: 5px;
+}
+.normalTable .rightInput .table-part .even-row {
+  background-color: #F5F5F5;
+}
 /*# sourceMappingURL=putIn.css.map */
