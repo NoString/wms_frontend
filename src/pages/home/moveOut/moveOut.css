@@ -1,0 +1,17 @@
+.normalTable {
+  padding: 0.5%;
+  overflow: auto;
+}
+.normalTable .left-row {
+  border-radius: 5px;
+}
+.normalTable .left-row .left-table {
+  margin-top: 5px;
+}
+.normalTable .right-row {
+  border-radius: 5px;
+}
+.normalTable .right-row .right-table {
+  margin-top: 5px;
+}
+/*# sourceMappingURL=moveOut.css.map */

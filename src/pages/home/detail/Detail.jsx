@@ -5,11 +5,6 @@ import {Progress, Select} from "antd";
 import Title from "antd/lib/typography/Title";
 export default () =>{
 
-    const renderProgress = (v1,v2,v3) => {
-        console.log(v1);
-        console.log(v2);
-        console.log(v3);
-    }
     let config = {
         prefixUrl: "/common/wmsLocTail",
         //配置search栏
@@ -71,23 +66,34 @@ export default () =>{
                 sort: "str"
             },
             {
+                title: 'Amount',
+                javaName: 'qty',
+                dbName: 'qty',
+                sort: "num"
+            },
+            {
                 title: 'Expired Progress',
                 dbName: 'progress',
                 javaName: 'progress',
                 sort:"num",
                 render: (value) => {
                     let color
+                    let status = null
                     if (value.progress >= 90) {
                         color = "#52c41a";
-                    }else if (value.progress < 90 && value.progress > 20){
-                        color = "bule";
+                    }else if (value < 90 && value >= 20){
+                        //default color
+                    }else if (value < 20 && value >= 1){
+                        color = "red";
                     }else {
                         color = "red";
+                        status="exception"
                     }
                     return (
                         <Progress percent={value.progress}
                                   size={[200,10]}
                                   strokeColor={color}
+                                  status={status}
                         />
                     )
                 }

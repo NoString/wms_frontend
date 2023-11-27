@@ -111,7 +111,6 @@ export default () => {
 
     //点击Add按钮,把数据添加到表格
     const addData = () => {
-        console.log(loc);
         if (loc === null || loc === undefined) {
             message.error("Please, choose the location number.")
             return
