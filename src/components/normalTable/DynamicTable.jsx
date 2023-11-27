@@ -246,12 +246,14 @@ const DynamicTable = (props) => {
 
             let field = {};
             field.title = value.title
-            field.dataIndex = value.javaName
+
             field.key = value.dbName
             field.align = "center"
 
             if (value.render !== undefined) {
                 field.render = value.render
+            }else {
+                field.dataIndex = value.javaName
             }
 
             //排序代码
@@ -265,7 +267,6 @@ const DynamicTable = (props) => {
                         break
                     case "num":
                         field.sorter = (a, b, c) => {
-
                             return a[value.javaName] - b[value.javaName]
 
                         }

@@ -73,13 +73,22 @@ export default () =>{
             {
                 title: 'Expired Progress',
                 dbName: 'progress',
-
+                javaName: 'progress',
+                sort:"num",
                 render: (value) => {
-
+                    let color
+                    if (value.progress >= 90) {
+                        color = "#52c41a";
+                    }else if (value.progress < 90 && value.progress > 20){
+                        color = "bule";
+                    }else {
+                        color = "red";
+                    }
                     return (
                         <Progress percent={value.progress}
                                   size={[200,10]}
-                                  status={null}/>
+                                  strokeColor={color}
+                        />
                     )
                 }
             },
