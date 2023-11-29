@@ -17,15 +17,14 @@ import PutIn from "../pages/home/putIn/PutIn";
 import MoveOut from "../pages/home/moveOut/MoveOut";
 import Check from "../pages/home/check/Check";
 import Transfer from "../pages/home/transfer/Transfer";
-import ModifyRecord from "../pages/home/modifyRecord/ModifyRecord";
 import DailyUsage from "../pages/home/dailyUsage/DailyUsage";
 import DayInOut from "../pages/home/dayInOut/DayInOut";
-import DayInDetail from "../pages/home/dayInDetail/DayInDetail";
 import DayOutDetail from "../pages/home/dayOutDetail/DayOutDetail";
 import MenuList from "../pages/home/menuList/MenuList";
 import Privilege from "../pages/home/privilege/Privilege";
 import Users from "../pages/home/users/Users";
 import Profile from "../pages/home/profile/Profile";
+import DayInDetail from "../pages/home/dayInDetail/DayInDetail";
 
 export const routingRoutes = [
     {
@@ -93,10 +92,7 @@ export const routingRoutes = [
                 path: 'transfer',
                 element: <Transfer/>
             },
-            {
-                path: 'modifyRecord',
-                element: <ModifyRecord/>
-            },
+
             {
                 path: 'dailyUsage',
                 element: <DailyUsage/>

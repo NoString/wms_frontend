@@ -74,11 +74,11 @@ export default () => {
         ]),
 
         getItem('Log', '400', <BarsOutlined/>, [
-            getItem(<NavLink to={'modifyRecord'}>Modify Record</NavLink>, '401', <Icons type={'icon-rizhi'}/>),
-            getItem(<NavLink to={'dailyUsage'}>Daily Usage</NavLink>, '402', <Icons type={'icon-rizhi'}/>),
-            getItem(<NavLink to={'dayInOut'}>Day In/Out</NavLink>, '403', <Icons type={'icon-rizhi'}/>),
             getItem(<NavLink to={'dayInDetail'}>Day In Detail</NavLink>, '404', <Icons type={'icon-rizhi'}/>),
             getItem(<NavLink to={'dayOutDetail'}>Day Out Detail</NavLink>, '405', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dailyUsage'}>Daily Usage</NavLink>, '402', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dayInOut'}>Day In/Out</NavLink>, '403', <Icons type={'icon-rizhi'}/>),
+
         ]),
         getItem('System', '500', <PushpinOutlined/>, [
             // getItem(<NavLink to={'menuList'}>Menu List</NavLink>, '501', <Icons type={'icon-menu'}/>),

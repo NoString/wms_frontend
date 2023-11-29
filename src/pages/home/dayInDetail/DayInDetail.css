@@ -1,0 +1,15 @@
+.modifyRecord {
+  height: 100%;
+}
+.modifyRecord .top-part {
+  height: 45%;
+}
+.modifyRecord .bottom-part {
+  height: 45%;
+  display: flex;
+  align-items: stretch;
+}
+.modifyRecord .bottom-part .area-chart {
+  flex-shrink: 0;
+}
+/*# sourceMappingURL=DayInDetail.css.map */

@@ -143,7 +143,7 @@ export default () => {
         let result = await ajax("/work/putin", tableDatas, "p");
         if (result.code === 200) {
             message.success(result.msg)
-            setTableDatas(null)
+            setTableDatas([])
             setMaterialCode(null)
             setMaterialName(null)
             setLoc(null)

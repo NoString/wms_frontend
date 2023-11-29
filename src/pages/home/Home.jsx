@@ -22,15 +22,14 @@ import PutIn from "./putIn/PutIn";
 import MoveOut from "./moveOut/MoveOut";
 import Check from "./check/Check";
 import Transfer from "./transfer/Transfer";
-import ModifyRecord from "./modifyRecord/ModifyRecord";
 import DailyUsage from "./dailyUsage/DailyUsage";
 import DayInOut from "./dayInOut/DayInOut";
-import DayInDetail from "./dayInDetail/DayInDetail";
 import DayOutDetail from "./dayOutDetail/DayOutDetail";
 import MenuList from "./menuList/MenuList";
 import Privilege from "./privilege/Privilege";
 import Users from "./users/Users";
 import Profile from "./profile/Profile";
+import DayInDetail from "./dayInDetail/DayInDetail";
 
 export default () => {
     if (localStorage.getItem("username") === null
@@ -63,7 +62,6 @@ export default () => {
                         {<Route path={'moveOut'} element={<MoveOut/>}/>}
                         {<Route path={'check'} element={<Check/>}/>}
                         {<Route path={'transfer'} element={<Transfer/>}/>}
-                        {<Route path={'modifyRecord'} element={<ModifyRecord/>}/>}
                         {<Route path={'dailyUsage'} element={<DailyUsage/>}/>}
                         {<Route path={'dayInOut'} element={<DayInOut/>}/>}
                         {<Route path={'dayInDetail'} element={<DayInDetail/>}/>}
