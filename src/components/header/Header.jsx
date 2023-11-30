@@ -19,51 +19,53 @@ export default (props) => {
     const toggleCollapsed = () => {
         setCollapsed(!collapsed)
     }
-    const reactLocation = useLocation()
     const navigate = useNavigate();
     const refresh = () => {
-        navigate(reactLocation.pathname)
+        window.location.reload();
     }
-    const onChange = (value) => {
-        console.log(`selected ${value}`);
-    };
-    const onSearch = (value) => {
-        console.log('search:', value);
-    };
-
-
 
 
     const items = [
-        {
-            key: '1',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    Profile
-                </a>
-            ),
-        },
+
         {
             key: 'logout',
             label: 'Log out',
         },
     ]
-    const initialItems = [
-        {
-            label: <HomeOutlined style={{marginLeft:'20%'}} />,
-            key: 'home',
-            closable: false
-        },
-        {
-            label: 'Tab 2',
-            key: '2',
-        },
-        {
-            label: 'Tab 3',
-            key: '3',
-        },
-    ];
 
+    let isFullscreen = false;
+    function toggleFullscreen() {
+        if (!isFullscreen) {
+            enterFullscreen();
+        } else {
+            exitFullscreen();
+        }
+    }
+    function enterFullscreen() {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) { // 兼容 Firefox
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { // 兼容 Chrome、Safari 和 Opera
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // 兼容 IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+        isFullscreen = true;
+    }
+
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // 兼容 Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // 兼容 Chrome、Safari 和 Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // 兼容 IE/Edge
+            document.msExitFullscreen();
+        }
+        isFullscreen = false;
+    }
 
     return (
         <div className={'header'}>
@@ -78,36 +80,36 @@ export default (props) => {
                     </Button>
                 </div>
                 <div className="mid-container">
-                    <Select
-                        showSearch
-                        placeholder="Select a person"
-                        optionFilterProp="children"
-                        onChange={onChange}
-                        onSearch={onSearch}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={[
-                            {
-                                value: 'jack',
-                                label: 'Jack',
-                            },
-                            {
-                                value: 'lucy',
-                                label: 'Lucy',
-                            },
-                            {
-                                value: 'tom',
-                                label: 'Tom',
-                            },
-                        ]}
-                        className={'mid-select'}
-                    />
+                    {/*<Select*/}
+                    {/*    showSearch*/}
+                    {/*    placeholder="Select a person"*/}
+                    {/*    optionFilterProp="children"*/}
+                    {/*    onChange={onChange}*/}
+                    {/*    onSearch={onSearch}*/}
+                    {/*    filterOption={(input, option) =>*/}
+                    {/*        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())*/}
+                    {/*    }*/}
+                    {/*    options={[*/}
+                    {/*        {*/}
+                    {/*            value: 'jack',*/}
+                    {/*            label: 'Jack',*/}
+                    {/*        },*/}
+                    {/*        {*/}
+                    {/*            value: 'lucy',*/}
+                    {/*            label: 'Lucy',*/}
+                    {/*        },*/}
+                    {/*        {*/}
+                    {/*            value: 'tom',*/}
+                    {/*            label: 'Tom',*/}
+                    {/*        },*/}
+                    {/*    ]}*/}
+                    {/*    className={'mid-select'}*/}
+                    {/*/>*/}
                 </div>
                 <div className="right-container">
                     <Button size={"middle"} shape="circle" icon={<RedoOutlined/>} onClick={refresh}/>
-                    <Button size={"middle"} shape="circle" icon={<FullscreenOutlined/>}/>
-                    <Button size={"middle"} shape="circle" icon={<CloseOutlined />} placeholder={'close all without this page'}/>
+                    <Button size={"middle"} shape="circle" icon={<FullscreenOutlined/>} onClick={toggleFullscreen}/>
+                    {/*<Button size={"middle"} shape="circle" icon={<CloseOutlined />} placeholder={'close all without this page'}/>*/}
 
                     <Dropdown
                         menu={{
@@ -135,13 +137,13 @@ export default (props) => {
             </div>
             <hr/>
             <div className={'tab-bar'}>
-                <Tabs
-                    type="editable-card"
-                    items={initialItems}
-                    hideAdd={true}
-                    style={{borderRadius:'10px'}}
-                    centered={true}
-                />
+                {/*<Tabs*/}
+                {/*    type="editable-card"*/}
+                {/*    items={initialItems}*/}
+                {/*    hideAdd={true}*/}
+                {/*    style={{borderRadius:'10px'}}*/}
+                {/*    centered={true}*/}
+                {/*/>*/}
             </div>
         </div>
     )

@@ -62,22 +62,22 @@ export default () => {
         getItem('Storage', '200', <PieChartOutlined/>, [
             getItem(<NavLink to={'location'}>Location</NavLink>, '201', <Icons type={'icon-localtion'}/>),
             getItem(<NavLink to={'detail'}>Detail</NavLink>, '202', <Icons type={'icon-details'}/>),
-            getItem(<NavLink to={'detailModify'}>Detail Modify</NavLink>, '203', <Icons type={'icon-exchange'}/>),
-            getItem(<NavLink to={'statistic'}>Statistic</NavLink>, '204', <Icons type={'icon-Statistics'}/>),
+            // getItem(<NavLink to={'detailModify'}>Detail Modify</NavLink>, '203', <Icons type={'icon-exchange'}/>),
+            // getItem(<NavLink to={'statistic'}>Statistic</NavLink>, '204', <Icons type={'icon-Statistics'}/>),
         ]),
 
         getItem('Operation', '300', <ToolOutlined/>, [
             getItem(<NavLink to={'putIn'}>Put In</NavLink>, '301', <Icons type={'icon-in1157920easyiconnet'}/>),
             getItem(<NavLink to={'moveOut'}>Move Out</NavLink>, '302', <Icons type={'icon-outnet'}/>),
             // getItem(<NavLink to={'check'}>Check</NavLink>, '303', <Icons type={'icon-Statistics'}/>),
-            getItem(<NavLink to={'transfer'}>Transfer</NavLink>, '304', <Icons type={'icon-check'}/>),
+            // getItem(<NavLink to={'transfer'}>Transfer</NavLink>, '304', <Icons type={'icon-check'}/>),
         ]),
 
         getItem('Log', '400', <BarsOutlined/>, [
             getItem(<NavLink to={'dayInDetail'}>Day In Detail</NavLink>, '404', <Icons type={'icon-rizhi'}/>),
             getItem(<NavLink to={'dayOutDetail'}>Day Out Detail</NavLink>, '405', <Icons type={'icon-rizhi'}/>),
-            getItem(<NavLink to={'dailyUsage'}>Daily Usage</NavLink>, '402', <Icons type={'icon-rizhi'}/>),
-            getItem(<NavLink to={'dayInOut'}>Day In/Out</NavLink>, '403', <Icons type={'icon-rizhi'}/>),
+            getItem(<NavLink to={'dailyUsage'}>Inventory</NavLink>, '402', <Icons type={'icon-rizhi'}/>),
+            // getItem(<NavLink to={'dayInOut'}>Day In/Out</NavLink>, '403', <Icons type={'icon-rizhi'}/>),
 
         ]),
         getItem('System', '500', <PushpinOutlined/>, [
@@ -85,9 +85,9 @@ export default () => {
             // getItem(<NavLink to={'privilege'}>Privilege</NavLink>, '502', <Icons type={'icon-privilege'}/>),
             getItem(<NavLink to={'users'}>Users</NavLink>, '503', <Icons type={'icon-User-List'}/>),
         ]),
-        getItem('Setting', '600', <UserOutlined/>, [
-            getItem(<NavLink to={'profile'}>Profile</NavLink>, '601', <Icons type={'icon-bu-profile-o'}/>),
-        ]),
+        // getItem('Setting', '600', <UserOutlined/>, [
+        //     getItem(<NavLink to={'profile'}>Profile</NavLink>, '601', <Icons type={'icon-bu-profile-o'}/>),
+        // ]),
 
     ];
     dynamicSelectNav();
@@ -101,6 +101,7 @@ export default () => {
         } else {
             setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
         }
+
     };
 
     return (
