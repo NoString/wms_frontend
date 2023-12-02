@@ -39,6 +39,7 @@ export default () =>{
             disableAdd: true,
             disableEdit: true,
             disableDelete: true,
+            sendEmail: true,
             field: [
 
             ],
@@ -81,14 +82,15 @@ export default () =>{
                     let status = null
                     if (value.progress >= 90) {
                         color = "#52c41a";
-                    }else if (value < 90 && value >= 20){
+                    }else if (value.progress < 90 && value.progress >= 20){
                         //default color
-                    }else if (value < 20 && value >= 1){
+                    }else if (value.progress < 20 && value.progress >= 1){
                         color = "red";
                     }else {
                         color = "red";
                         status="exception"
                     }
+
                     return (
                         <Progress percent={value.progress}
                                   size={[200,10]}

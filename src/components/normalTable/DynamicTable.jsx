@@ -13,13 +13,14 @@ import {
     theme,
 
     Popconfirm,
-    Form
+    Form, Modal, Tooltip
 } from "antd";
 import {FileExcelOutlined} from "@ant-design/icons";
 import {reqDeleteRows, reqQueryTable} from "../../api/table";
 import EditModal from "./editModal/EditModal";
 import AddModal from "./addModal/AddModal";
 import login from "../../pages/login/Login";
+import ajax from "../../api/ajax";
 
 
 const DynamicTable = (props) => {
@@ -57,6 +58,7 @@ const DynamicTable = (props) => {
 
     //多选框选中的key
     const [selectedKeys, setSelectedKeys] = useState([]);
+
 
     /****************************************初始化****************************************/
 
@@ -192,8 +194,6 @@ const DynamicTable = (props) => {
 
 
     const tableSelectChange = (key, selectedRows) => {
-        console.log(key);
-        console.log(selectedRows);
         setSelectedKeys(key)
         setSelectedArr(selectedRows)
 
@@ -312,6 +312,15 @@ const DynamicTable = (props) => {
         setIsEditModalOpen(true)
     }
 
+    const onClickNoticeUsers = async () => {
+        let result = await ajax("/common/wmsLocTail/notice", null, "p");
+        if (result.code === 200) {
+            message.success(result.msg)
+        } else {
+            message.error(result.msg)
+        }
+    }
+
     return (
         <div className={'normalTable'}>
             <AdvancedSearchForm/>
@@ -338,6 +347,14 @@ const DynamicTable = (props) => {
                                 >
                                     <Button danger type="primary" size={'middle'}>Delete</Button>
                                 </Popconfirm>
+                            )
+                        }
+
+                        {
+                            operationConfig.sendEmail !== true && operationConfig.sendEmail === undefined  ? (<div></div>) : (
+                                <Tooltip title="Send all expired items to all users.">
+                                    <Button type="primary" size={'middle'} onClick={onClickNoticeUsers}>Notice all user</Button>
+                                </Tooltip>
                             )
                         }
 
