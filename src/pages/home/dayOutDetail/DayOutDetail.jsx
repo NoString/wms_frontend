@@ -114,7 +114,7 @@ export default () =>{
     const getRightPie = async () => {
         let Data = {
             title : {
-                text: 'Group by classify',
+                text: 'Group by User',
                 x:'center'
             },
             tooltip : {
