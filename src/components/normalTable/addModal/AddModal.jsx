@@ -13,7 +13,9 @@ export default (props) => {
         console.log(item3);
     }
 
-    const AdvancedModalForm = (key) => {
+    const
+
+        AdvancedModalForm = (key) => {
         return (
             <div key={key}>
                 {
