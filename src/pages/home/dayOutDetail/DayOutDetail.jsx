@@ -37,7 +37,7 @@ export default () =>{
                 trigger: 'axis'
             },
             legend: {
-                data:['In']
+                data:['Out']
             },
             grid: {
                 left: '3%',
@@ -59,7 +59,7 @@ export default () =>{
             ],
             series : [
                 {
-                    name:'In',
+                    name:'Out',
                     type:'line',
                     stack: '总量',
                     areaStyle: {normal: {}},
